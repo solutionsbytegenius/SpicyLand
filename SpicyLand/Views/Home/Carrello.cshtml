@@ -16,17 +16,6 @@
 	});
 </script>
 
-<script>
-	$(document).ready(function () {
-		$('.open-modal').click(function () {
-			var guid = $(this).data('guid');
-			console.log(guid);
-			document.getElementById("OrdineID").value = guid;
-			console.log(document.getElementById("OrdineID").value);
-		});
-	});
-</script>
-
 
 <div class="Container">
 	<div class="row">
@@ -95,8 +84,8 @@
 							</tr>
 						}
 						<tr>
-							<td colspan="5" class="dt-empty"><h4>Totale: € @Accessor.HttpContext?.Session.GetString("Totale")</h4></td>
-							<td colspan="2" class="dt-empty">
+							<td colspan="6" class="dt-empty"><h4>Totale: € @Accessor.HttpContext?.Session.GetString("Totale")</h4></td>
+							<td colspan="1" class="dt-empty">
 								<button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#AddOrdine" data-guid="Guid.NewGuid()">
 									Completa Ordine
 								</button>
@@ -121,7 +110,7 @@
 			</div>
 			<div class="modal-body">
 				<p>Vuoi procedere con la rimozione?</p>
-					<input type="hidden" name="ID" id="OrdineID"  value=""/>
+					<input type="hidden" name="ID" id="ID" value="" />
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annulla</button>
