@@ -1,0 +1,130 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+@model CartItemCollection
+@{
+	ViewData["Title"] = "Carrello";
+}
+
+@* <script>
+	$(document).ready(function () {
+		$('.open-modal').click(function () {
+			var guid = $(this).data('guid');
+			console.log(guid);
+			$.get('/Home/DeleteFromCart', { Id: guid })
+				.done(function (data) {
+					$('#DeleteModalCart').modal('hide');
+				})
+				.fail(function (xhr, status, error) {
+					console.error("Errore durante il caricamento dei dati della modale:", error);
+				});
+		});
+	});
+</script> *@
+
+<script>
+	$(document).ready(function () {
+		$('.open-modal').click(function () {
+			var guid = $(this).data('guid');
+			console.log(guid);
+			document.getElementById("ID").value = guid;
+			console.log(document.getElementById("ID").value);
+		});
+	});
+</script>
+
+
+<div class="Container">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<center>
+				<Titolo>Carrello</Titolo>
+			</center>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="table-responsive ">
+			<table class="table table-striped table-light">
+				<thead>
+					<tr>
+						<th>Nome</th>
+						<th>Prezzo (€)</th>
+						<th>Plus</th>
+						<th>Bevanda</th>
+						<th>Note</th>
+						<th>
+							Azione
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					@if (String.IsNullOrEmpty(@Accessor.HttpContext?.Session.GetString("Collection")))
+					{
+						<tr>
+							<td colspan="6" class="dt-empty"><center>Nessun elemento presente nel carrello</center></td>
+						</tr>
+					}
+					else
+					{
+						@foreach (var x in Model)
+						{
+							<tr>
+								<td><p>@x.Panino</p></td>
+								<td><p>€ @x.Prezzo</p></td>
+								<td>
+									@if (x.Plus == true)
+									{
+										<i class="bi bi-check-lg" style="color:forestgreen;"></i>
+									}
+								</td>
+								<td>
+									<p>@x.Bevanda</p>
+								</td>
+								<td>
+									<p>@x.Note</p>
+								</td>
+								<td>
+									<button type="button" class="btn btn-danger open-modal" data-bs-toggle="modal" data-bs-target="#DeleteModalCart" data-guid="@x.ID">
+										<i class="bi bi-trash-fill"></i>
+									</button>
+								</td>
+							</tr>
+						}
+						<tr>
+							<td colspan="6" class="dt-empty"><h4>Totale: € @Accessor.HttpContext?.Session.GetString("Totale")</h4></td>
+						</tr>
+					}
+
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="DeleteModalCart">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="post" action="DeleteFromCart">
+			<div class="modal-header">
+				<h5 class="modal-title">Rimuovi dal Carrello</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p>Vuoi procedere con la rimozione?</p>
+					<input type="hidden" name="ID" id="ID"  value=""/>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annulla</button>
+				<button type="submit" class="btn btn-danger" data-bs-dismiss="modal" >Elimina</button>
+			</div>
+			</form>
+		</div>
+	</div>
+</div>
+

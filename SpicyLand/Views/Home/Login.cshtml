@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+<div class="Container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <center>
+                <Titolo>SpicyLand</Titolo>
+            </center>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<br />
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <main class="form-signin">
+                <form method="post" action="Verify">
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="Username" name="Username" placeholder="Username" wfd-id="id0" required>
+                        <label for="floatingInput">Username</label>
+                    </div>
+                    <br />
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="Password" name="Password" placeholder="Password" wfd-id="id1" required>
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <br />
+                    <button class="w-100 btn btn-lg btn-primary" id="Login" type="submit">Accedi</button>
+                </form>
+            </main>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>

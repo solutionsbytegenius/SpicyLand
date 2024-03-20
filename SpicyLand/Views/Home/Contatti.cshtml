@@ -1,0 +1,82 @@
+﻿@{
+	ViewData["Title"] = "Contatti";
+}
+
+<div class="Container">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<center>
+				<Titolo>Contatti</Titolo>
+			</center>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-5">
+			<Minititolo> Come contattarci:</Minititolo>
+			<br />
+			<div class="card" style="width: 25rem;">
+				<div class="card-body">
+
+					<p class="card-text">
+						<div class="input-group mb-3">
+							<span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-telephone-fill" style="color:white"></i></span>
+							<input type="text" class="form-control bg-light" value="0951234567" readonly />
+						</div>
+					</p>
+					<b>Orari: </b>
+					<ul class="card-text" style="list-style-type: none;">
+						@foreach (var x in Model)
+						{
+							@if (@x.Chiuso == true)
+							{
+								<li class="card-text">@x.Giorno: Chiuso</li>
+							}
+							else
+							{
+								<li class="card-text">@x.Giorno: @x.OrarioInizio - @x.OrarioFine</li>
+							}
+						}
+					</ul>
+					<div class="row">
+						<div class="col-md-2"></div>
+						<div class="col-md-2">
+							<button class="btn btn-primary btn-circle" href=""><i class="bi bi-facebook"></i></button>
+						</div>
+						<div class="col-md-2">
+							<button class="btn btn-success btn-circle" href=""><i class="bi bi-whatsapp"></i></button>
+						</div>
+						<div class="col-md-2">
+							<button class="btn share-btn share-btn-instagram btn-circle" href=""><span class="bi bi-instagram share-text"></span></button>
+						</div>
+						<div class="col-md-2">
+							<button class="btn btn-dark btn-circle text-light" href=""><i class="bi bi-twitter-x " style="color:white;"></i></button>
+						</div>
+						<div class="col-md-2"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2"></div>
+		<div class="col-md-5">
+			<Minititolo>Dove siamo?</Minititolo>
+			<div class="card" style="width: 25rem;">
+				<div class="card-body">
+					<p class="card-text">
+						<div class="input-group mb-3">
+							<span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-building" style="color:white"></i></span>
+							<input type="text" class="form-control bg-light" value="Viale Andrea Doria, 6, 95125 Catania CT" readonly />
+						</div>
+						<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6328.489032092465!2d15.070281811373516!3d37.52573297193263!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1313fd24265300d1%3A0x309382016a00c167!2sUniversit%C3%A0%20degli%20Studi%20di%20Catania%20-%20Dipartimento%20di%20Matematica%20e%20Informatica!5e0!3m2!1sit!2sit!4v1710966553412!5m2!1sit!2sit" width="365" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+					</p>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>

@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "Menù";
+}
+
+
+<script>
+    $(document).ready(function () {
+        $('.open-modal').click(function () {
+            var guid = $(this).data('guid');
+            document.getElementById("Panino").value = guid;
+            console.log($(this).data());
+            $.get('/Home/ShowModal', { PaninoID: guid })
+                .done(function (data) {
+                    console.log(data);
+                    console.log(data.Nome);
+                    // Popoliamo dinamicamente il titolo e il corpo della modale con i dati ricevuti dalla richiesta AJAX
+                    $('#modalTitle').text(data.Nome);
+                    $('#modalBody').html(data);
+                    $('#myModal').modal('show');
+                })
+                .fail(function (xhr, status, error) {
+                    console.error("Errore durante il caricamento dei dati della modale:", error);
+                });
+            
+        });
+    });
+</script>
+
+
+
+<div class="Container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <center>
+                <Titolo>Menù</Titolo>
+            </center>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<br />
+
+<div class="container">
+    <div class="row">
+        @foreach (var x in Model)
+        {
+
+            <div class="col-md-3">
+                <div class="card" style="width: 18rem; margin-bottom:20px;">
+                    <img class="card-img-top" src="@x.PathImage" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@x.Nome</h5>
+                        <p class="card-text">€ @x.Prezzo</p>
+                        <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                            Dettagli
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="AddCart">
+                <input type="hidden" id="Panino" name="PaninoID" value="" />
+                <!-- Modal body -->
+                <div class="modal-body" id="modalBody">
+                    <!-- Il corpo della modale sarà popolato dinamicamente tramite AJAX -->
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Aggiungi al carrello</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
