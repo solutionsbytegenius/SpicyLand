@@ -1,0 +1,23 @@
+﻿@model Ordine
+<script>
+	$(document).ready(function () {
+		$('#check1').change(function () {
+			if (this.checked) {
+				$('#DropDownBevanda').show();
+				$('#DropDownPatatine').show();
+				document.getElementById("check").value = true;
+			} else {
+				$('#DropDownBevanda').hide();
+				$('#DropDownPatatine').hide();
+				document.getElementById("check").value = false;
+			}
+		});
+	});
+	$('#modalTitle').text(document.getElementById("Nome").title);
+</script>
+<img class="card-img-top" src="/Images/Panini/logo.png" alt="Card image cap">
+<p style="display:none" id="Nome" title="@Model.Cliente - @Model.Panino"></p>
+<p><b>Panino: </b>@Model.Panino</p>
+<p> <b>Patatine: </b>@Model.PlusPatatine</p>
+<p> <b>Bevande: </b>@Model.PlusBevanda</p>
+<p> <b>Note: <br /></b>@Model.PlusBevanda</p>

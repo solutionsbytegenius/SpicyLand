@@ -9,7 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System.Text.Json;
-
+using System.Data;
+using Microsoft.Data.SqlClient;
+using System.Configuration;
 
 namespace SpicyLand.Controllers
 {
@@ -64,6 +66,7 @@ namespace SpicyLand.Controllers
             item.ID = Guid.NewGuid();
             if (String.IsNullOrEmpty(item.Note)) item.Note = "";
             if (String.IsNullOrEmpty(item.Bevanda)) item.Bevanda = "";
+            if (String.IsNullOrEmpty(item.Patatine)) item.Patatine = "";
             if (item.Plus) item.Prezzo += 2.50;
             if (String.IsNullOrEmpty(item.Panino) || item.Panino.ToLower() == "undefined" ) 
             {
@@ -157,29 +160,60 @@ namespace SpicyLand.Controllers
 #pragma warning restore CS8601 // Possibile assegnazione di riferimento Null.
 				totale = float.Parse(HttpContext?.Session.GetString("Totale"));
 			}
-            Guid OrdineId = Guid.NewGuid();
-            foreach (var item in CartCollection)
-            {
-                OrdineEntity ordine = new OrdineEntity()
-                {
-                    OrdineID = OrdineId,
-                    Cliente = Cliente,
-                    Annullato = false,
-                    Consegnato = false,
-                    Bevanda = item.Bevanda,
-                    InLavorazione = true,
-                    DataAnnullamento = new DateTime(),
-                    DataPrenotazione = DateTime.Now,
-                    Note = item.Note,
-                    Plus = item.Plus,
-                    PaninoID = item.PaninoID,
-                    Patatine = item.Patatine,
-                    PrezzoFinale = totale
-				};
-				_db.Ordine.Add(ordine);
-				_db.SaveChanges();
+            string connectionString = "Server=tcp:solutionsbyte.database.windows.net,1433;Initial Catalog=SpicyLand;Persist Security Info=False;User ID=dimarco;Password=SistemiCloud2023@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				Guid OrdineId = Guid.NewGuid();
+
+				connection.Open();
+                int count = 1;
+				foreach (var item in CartCollection)
+				{
+					#region Comments
+					/*OrdineEntity ordine = new OrdineEntity()
+					{
+						OrdineID = OrdineId,
+						Cliente = Cliente,
+						Annullato = false,
+						Consegnato = false,
+						Bevanda = item.Bevanda,
+						InLavorazione = true,
+						DataAnnullamento = new DateTime(),
+						DataPrenotazione = DateTime.Now,
+						Note = item.Note,
+						Plus = item.Plus,
+						PaninoID = item.PaninoID,
+						Patatine = item.Patatine,
+						PrezzoFinale = totale
+					};
+					_db.Ordine.Add(ordine);
+					_db.SaveChanges();*/
+					#endregion
+
+					SqlCommand command = new SqlCommand("InsertOrdine", connection);
+					command.CommandType = CommandType.StoredProcedure;
+
+					// Aggiungi i parametri alla stored procedure
+					command.Parameters.AddWithValue("@OrdineID", OrdineId);
+					command.Parameters.AddWithValue("@Cliente", Cliente);
+					command.Parameters.AddWithValue("@Annullato", false);
+					command.Parameters.AddWithValue("@Consegnato", false);
+					command.Parameters.AddWithValue("@Bevanda", item.Bevanda); // Esempio
+					command.Parameters.AddWithValue("@InLavorazione", true);
+					command.Parameters.AddWithValue("@DataAnnullamento", DateTime.Now);
+					command.Parameters.AddWithValue("@DataPrenotazione", DateTime.Now);
+					command.Parameters.AddWithValue("@Note", item.Note); // Esempio
+					command.Parameters.AddWithValue("@Plus", item.Plus); // Esempio
+					command.Parameters.AddWithValue("@PaninoID", item.PaninoID); // Esempio
+					command.Parameters.AddWithValue("@Patatine", item.Patatine);
+					command.Parameters.AddWithValue("@PrezzoFinale", item.Prezzo);
+					command.Parameters.AddWithValue("@NumeroOrdine", count);
+					command.ExecuteNonQuery();
+					count++;
+				}
+				connection.Close();
 			}
-            CartCollection.Clear();
+			CartCollection.Clear();
             CartCollection = new CartItemCollection();
 			HttpContext.Session.SetString("Collection", "");
 			HttpContext.Session.SetString("Totale", "0");
@@ -209,7 +243,8 @@ namespace SpicyLand.Controllers
         public IActionResult Ordinazioni()
         {
             OrdineCollection OrdineCollection = new OrdineCollection();
-            List<OrdineEntity> Ordini = _db.Ordine.Where(x => x.DataPrenotazione.Date == DateTime.Now.Date).ToList();
+			//
+			List<OrdineEntity> Ordini = _db.Ordine.Where(x => x.DataPrenotazione.Date == DateTime.Now.Date && x.Annullato!=true).ToList();
 
             foreach (var ordine in Ordini)
             {
@@ -287,6 +322,24 @@ namespace SpicyLand.Controllers
             PaninoEntity Panino = _db.Panino.FirstOrDefault(x => x.PaninoID == PaninoID);
 #pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
             return PartialView("ModalDetail", Panino);
+        }
+
+        public IActionResult ShowOrderModal(int Order)
+        {
+#pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+            OrdineEntity ord = _db.Ordine.FirstOrDefault(x => x.NumeroOrdine == Order && x.DataPrenotazione.Date == DateTime.Now.Date);
+            string panino = _db.Panino.FirstOrDefault(x => x.PaninoID == ord.PaninoID).Nome;
+            Ordine ordine = new Ordine()
+            {
+                OrdineID = ord.OrdineID,
+                Panino = panino,
+                PlusBevanda = ord.Bevanda,
+                PlusPatatine = ord.Patatine,
+                Note = ord.Note,
+                Cliente = ord.Cliente
+            };
+#pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+            return PartialView("OrderDetail", ordine);
         }
 
         public IActionResult Carrello()
