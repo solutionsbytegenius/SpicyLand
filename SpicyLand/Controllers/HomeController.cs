@@ -31,22 +31,15 @@ namespace SpicyLand.Controllers
             return View(News);
         }
 
-        // GET: Panini/AggiungiPanino
-        [HttpGet]
-        public ActionResult AggiungiPanino()
-        {
-            return PartialView("_AggiungiPanino");
-        }
-
         // POST: Panini/AggiungiPanino
         [HttpPost]
         public ActionResult AggiungiPanino(PaninoEntity panino)
         {
             if (ModelState.IsValid)
             {
-                _db.Panino.Add(panino);
-                _db.SaveChanges();
-                return RedirectToAction("Index");
+				_db.Panino.Add(panino);
+				_db.SaveChanges();
+				return RedirectToAction("Index");
             }
             return PartialView("_AggiungiPanino", panino);
         }
@@ -147,7 +140,54 @@ namespace SpicyLand.Controllers
 
             return RedirectToAction("Login");
         }
-        public IActionResult Logout()
+
+        [HttpPost]
+        public  IActionResult CompleteOrdine(string Cliente)
+        {
+            float totale = 0;
+			if (!String.IsNullOrEmpty(HttpContext?.Session.GetString("Collection")))
+			{
+#pragma warning disable CS8602 // Dereferenziamento di un possibile riferimento Null.
+				var jsonStringFromSession = HttpContext.Session.GetString("Collection");
+#pragma warning restore CS8602 // Dereferenziamento di un possibile riferimento Null.
+#pragma warning disable CS8601 // Possibile assegnazione di riferimento Null.
+#pragma warning disable CS8604 // Possibile argomento di riferimento Null.
+				CartCollection = JsonConvert.DeserializeObject<CartItemCollection>(jsonStringFromSession);
+#pragma warning restore CS8604 // Possibile argomento di riferimento Null.
+#pragma warning restore CS8601 // Possibile assegnazione di riferimento Null.
+				totale = float.Parse(HttpContext?.Session.GetString("Totale"));
+			}
+            Guid OrdineId = Guid.NewGuid();
+            foreach (var item in CartCollection)
+            {
+                OrdineEntity ordine = new OrdineEntity()
+                {
+                    OrdineID = OrdineId,
+                    Cliente = Cliente,
+                    Annullato = false,
+                    Consegnato = false,
+                    Bevanda = item.Bevanda,
+                    InLavorazione = true,
+                    DataAnnullamento = new DateTime(),
+                    DataPrenotazione = DateTime.Now,
+                    Note = item.Note,
+                    Plus = item.Plus,
+                    PaninoID = item.PaninoID,
+                    Patatine = item.Patatine,
+                    PrezzoFinale = totale
+				};
+				_db.Ordine.Add(ordine);
+				_db.SaveChanges();
+			}
+            CartCollection.Clear();
+            CartCollection = new CartItemCollection();
+			HttpContext.Session.SetString("Collection", "");
+			HttpContext.Session.SetString("Totale", "0");
+			HttpContext.Session.SetString("Count", "0");
+			return RedirectToAction("Index");
+        }
+
+		public IActionResult Logout()
         {
             HttpContext.Session.Remove("UserID");
             HttpContext.Session.Remove("UserName");
@@ -169,45 +209,45 @@ namespace SpicyLand.Controllers
         public IActionResult Ordinazioni()
         {
             OrdineCollection OrdineCollection = new OrdineCollection();
-            /*  List<OrdineEntity> Ordini = _db.Ordine.Where(x => x.DataPrenotazione.Date == DateTime.Now.Date).ToList();
+            List<OrdineEntity> Ordini = _db.Ordine.Where(x => x.DataPrenotazione.Date == DateTime.Now.Date).ToList();
 
-              foreach(var ordine in Ordini)
-              {
-                  var item = new Ordine()
-                  {
-                      OrdineID = ordine.OrdineID,
-                      Consegnato = false,
-                      Annullato = false,
-                      Cliente = ordine.Cliente
-                  };
-                  if (OrdineCollection != null)
-                  {
-                      var panino = _db.Panino.FirstOrDefault(x=>x.PaninoID == ordine.PaninoID);
+            foreach (var ordine in Ordini)
+            {
+                var item = new Ordine()
+                {
+                    OrdineID = ordine.OrdineID,
+                    Consegnato = false,
+                    Annullato = false,
+                    Cliente = ordine.Cliente
+                };
+                if (OrdineCollection != null)
+                {
+                    var panino = _db.Panino.FirstOrDefault(x => x.PaninoID == ordine.PaninoID);
 
-                      if (OrdineCollection.Any(x=>x.Panino == panino.Nome && !String.IsNullOrEmpty(x.PlusBevanda) && !String.IsNullOrEmpty(x.Note)))
-                      {
-                              OrdineCollection.FirstOrDefault(x => x.Panino == panino.Nome && !String.IsNullOrEmpty(x.PlusBevanda) && !String.IsNullOrEmpty(x.Note)).Quantita++;
-                      }
-                      else
-                      {
-                          item.Panino = panino.Nome;
-                          item.Quantita = 1;
-                          if (ordine.Plus)
-                          {
-                              item.PlusBevanda = ordine.Bevanda;
-                              item.PlusPatatine = "Patatine fritte";
-                          }
-                          item.Note = ordine.Note;
-                          item.numOrdine = OrdineCollection.Count + 1;
-                          OrdineCollection.Add(item);
-                      }
-                  }
-                  else
-                  {
-                      item.numOrdine = 1;
-                      OrdineCollection.Add(item);
-                  }
-              }*/
+                    if (OrdineCollection.Any(x => x.Panino == panino.Nome && !String.IsNullOrEmpty(x.PlusBevanda) && !String.IsNullOrEmpty(x.Note) && !String.IsNullOrEmpty(x.PlusPatatine) && x.PlusPatatine==ordine.Patatine && x.PlusBevanda == ordine.Bevanda))
+                    {
+                        OrdineCollection.FirstOrDefault(x => x.Panino == panino.Nome && !String.IsNullOrEmpty(x.PlusBevanda) && !String.IsNullOrEmpty(x.Note) && !String.IsNullOrEmpty(x.PlusPatatine) && x.PlusPatatine == ordine.Patatine && x.PlusBevanda == ordine.Bevanda).Quantita++;
+                    }
+                    else
+                    {
+                        item.Panino = panino.Nome;
+                        item.Quantita = 1;
+                        if (ordine.Plus)
+                        {
+                            item.PlusBevanda = ordine.Bevanda;
+                            item.PlusPatatine = ordine.Patatine;
+                        }
+                        item.Note = ordine.Note;
+                        item.numOrdine = OrdineCollection.Count + 1;
+                        OrdineCollection.Add(item);
+                    }
+                }
+                else
+                {
+                    item.numOrdine = 1;
+                    OrdineCollection.Add(item);
+                }
+            }
             if (OrdineCollection != null)
                 return View("Ordinazioni", OrdineCollection);
             else return View("Ordinazioni");

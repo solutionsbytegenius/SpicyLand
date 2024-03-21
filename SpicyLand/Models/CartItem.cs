@@ -9,6 +9,7 @@
         public bool Plus { get; set; } = false;
         public string Note { get; set; } = "";
         public string Bevanda { get; set; } = "";
+        public string Patatine { get; set; } = "";
         public double Prezzo { get; set; }
 
         #endregion

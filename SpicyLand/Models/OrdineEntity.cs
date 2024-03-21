@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace SpicyLand.Models
 {
     [Keyless]
     public class OrdineEntity
     {
-
+        [Key]
         public Guid OrdineID { get; set; }
         public Guid PaninoID { get; set; }
         public bool Plus { get; set; }
@@ -18,6 +19,7 @@ namespace SpicyLand.Models
         public string Note { get; set; } = "";
 		public string Bevanda { get; set; } = "";
 		public string Cliente { get; set; } = "";
+		public string Patatine { get; set; } = "";
 
 	}
 }

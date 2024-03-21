@@ -22,7 +22,7 @@
 					<tr>
 						<th>Cliente</th>
 						<th>Ordine n°.</th>
-						<th>Panino</th>
+						<th>Ordine</th>
 						<th>Quantità</th>
 						<th>Note</th>
 						<th>Status</th>
@@ -38,7 +38,10 @@
 							<tr>
 								<td>@x.Cliente</td>
 								<td>@x.numOrdine</td>
-								<td>@x.Panino</td>
+								<td><h3>@x.Panino</h3>
+									<h5> @x.PlusPatatine</h5>	
+									<h5> @x.PlusBevanda</h5>	
+								</td>
 								<td>
 									x @x.Quantita
 								</td>

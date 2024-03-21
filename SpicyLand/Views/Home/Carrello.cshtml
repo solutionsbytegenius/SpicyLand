@@ -5,22 +5,6 @@
 	ViewData["Title"] = "Carrello";
 }
 
-@* <script>
-	$(document).ready(function () {
-		$('.open-modal').click(function () {
-			var guid = $(this).data('guid');
-			console.log(guid);
-			$.get('/Home/DeleteFromCart', { Id: guid })
-				.done(function (data) {
-					$('#DeleteModalCart').modal('hide');
-				})
-				.fail(function (xhr, status, error) {
-					console.error("Errore durante il caricamento dei dati della modale:", error);
-				});
-		});
-	});
-</script> *@
-
 <script>
 	$(document).ready(function () {
 		$('.open-modal').click(function () {
@@ -55,6 +39,7 @@
 						<th>Nome</th>
 						<th>Prezzo (€)</th>
 						<th>Plus</th>
+						<th>Patatine</th>
 						<th>Bevanda</th>
 						<th>Note</th>
 						<th>
@@ -66,7 +51,7 @@
 					@if (String.IsNullOrEmpty(@Accessor.HttpContext?.Session.GetString("Collection")))
 					{
 						<tr>
-							<td colspan="6" class="dt-empty"><center>Nessun elemento presente nel carrello</center></td>
+							<td colspan="7" class="dt-empty"><center>Nessun elemento presente nel carrello</center></td>
 						</tr>
 					}
 					else
@@ -83,6 +68,9 @@
 									}
 								</td>
 								<td>
+									<p>@x.Patatine</p>
+								</td>
+								<td>
 									<p>@x.Bevanda</p>
 								</td>
 								<td>
@@ -97,6 +85,11 @@
 						}
 						<tr>
 							<td colspan="6" class="dt-empty"><h4>Totale: € @Accessor.HttpContext?.Session.GetString("Totale")</h4></td>
+							<td colspan="1" class="dt-empty">
+								<button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#AddOrdine" data-guid="Guid.NewGuid()">
+									Completa Ordine
+								</button>
+							</td>
 						</tr>
 					}
 
@@ -117,7 +110,7 @@
 			</div>
 			<div class="modal-body">
 				<p>Vuoi procedere con la rimozione?</p>
-					<input type="hidden" name="ID" id="ID"  value=""/>
+					<input type="hidden" name="ID" id="ID" value="" />
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Annulla</button>
@@ -128,3 +121,26 @@
 	</div>
 </div>
 
+
+
+<div class="modal fade" id="AddOrdine">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form method="post" action="CompleteOrdine">
+				<div class="modal-header">
+					<h5 class="modal-title">Confermare Ordine?</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+                    <label for="floatingInput">Cliente: </label>
+					<input type="text" class="form-control" id="Cliente" name="Cliente" placeholder="Cliente" wfd-id="id0" required>
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Annulla</button>
+					<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Invia Ordine</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
