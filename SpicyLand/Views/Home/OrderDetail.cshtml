@@ -14,10 +14,26 @@
 		});
 	});
 	$('#modalTitle').text(document.getElementById("Nome").title);
+
 </script>
-<img class="card-img-top" src="/Images/Panini/logo.png" alt="Card image cap">
 <p style="display:none" id="Nome" title="@Model.Cliente - @Model.Panino"></p>
+
+<input type="hidden" id="numero" name="Ordine" value="@Model.numOrdine" />
+<input type="hidden" id="numero" name="OrdineID" value="@Model.OrdineID" />
 <p><b>Panino: </b>@Model.Panino</p>
 <p> <b>Patatine: </b>@Model.PlusPatatine</p>
 <p> <b>Bevande: </b>@Model.PlusBevanda</p>
 <p> <b>Note: <br /></b>@Model.PlusBevanda</p>
+<div class="row">
+	<div class="col-md-3"></div>
+	<div class="col-md-6">
+		<div class="dropdown" id="DropDownScelta">
+			<select class="form-select btn btn-primary dropdown-toggle" name="Scelta" aria-label="Default select example">
+				<option value="" selected>Azione</option>
+				<option value="Annulla">Annulla</option>
+				<option value="Consegnato">Consegnato</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-3"></div>
+</div>
