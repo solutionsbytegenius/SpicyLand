@@ -306,7 +306,32 @@ namespace SpicyLand.Controllers
 			return PartialView("ModalDetail", Panino);
 		}
 
-		public IActionResult ShowOrderModal(int Order)
+        public IActionResult ShowEditModal(string Scelta)
+        {
+			if(!String.IsNullOrEmpty(Scelta) && Scelta == "Add")
+			{
+                return PartialView("ModalEditMenu");
+            }
+			Guid PaninoID = new Guid(Scelta);
+#pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+            PaninoEntity Pan = _db.Panino.FirstOrDefault(x => x.PaninoID == PaninoID);
+			Panino panino = new Panino()
+			{
+				PaninoID = Pan.PaninoID,
+				Nome = Pan.Nome,
+				Descrizione = Pan.Descrizione,
+				Categoria = Pan.Categoria,
+				InMenu = Pan.InMenu,
+				Immagine = Pan.Immagine,
+				PathImage = Pan.PathImage,
+				PaninoMese = Pan.PaninoMese,
+				Prezzo = Pan.Prezzo,
+			};
+#pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+            return PartialView("ModalEditMenu", panino);
+        }
+
+        public IActionResult ShowOrderModal(int Order)
 		{
 #pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
 			OrdineEntity ord = _db.Ordine.FirstOrDefault(x => x.NumeroOrdine == Order && x.DataPrenotazione.Date == DateTime.Now.Date);

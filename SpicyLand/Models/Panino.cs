@@ -11,6 +11,7 @@
         public  string PathImage { get; set; }
         public bool InMenu { get; set; }
         public bool PaninoMese { get; set; }
+        public string Categoria { get; set; } = "";
 
         public Panino()
         {
@@ -23,6 +24,7 @@
             PathImage = "";
             InMenu = false;
             PaninoMese = false;
+            Categoria = "";
         }
     }
 }
