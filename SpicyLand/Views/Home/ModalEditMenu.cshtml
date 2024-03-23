@@ -23,12 +23,12 @@
 }
 else
 {
-    <p style="display:none" id="Nome" title="Nuovo Panino"></p>
+    <p style="display:none" id="Nome" title="Nuovo Piatto"></p>
 }
 <div class="row">
     <div class="col-md-6">
 
-        <label for="Nome" class="form-label">Panino:</label>
+        <label for="Nome" class="form-label">Piatto:</label>
         @if (Model != null)
         {
             <input type="hidden" id="PaninoID" name="PaninoID" value="@Model.PaninoID" />
@@ -36,7 +36,7 @@ else
         }
         else
         {
-            <input type="text" class="form-control" id="Nome" name="Nome" placeholder="Inserisci nome panino" required />
+            <input type="text" class="form-control" id="Nome" name="Nome" placeholder="Inserisci nome piatto" required />
         }
     </div>
     <div class="col-md-6">

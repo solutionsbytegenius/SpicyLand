@@ -26,15 +26,17 @@ namespace SpicyLand.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
-		{
-			HttpContext.Session.SetString("Count", "0");
-			IEnumerable<NewsEntity> News = _db.News.ToList();
-			return View(News);
-		}
+        public IActionResult Index()
+        {
+            HttpContext.Session.SetString("Count", "0");
+            IEnumerable<NewsEntity> News = _db.News.Where(x => x.ScadenzaNotizia <= DateTime.Now).ToList();
+            if (News.Any())
+                return View(News);
+            return View();
+        }
 
-		// POST: Panini/AggiungiPanino
-		[HttpPost]
+        // POST: Panini/AggiungiPanino
+        [HttpPost]
 		public ActionResult AggiungiPanino(PaninoEntity panino)
 		{
 			if (ModelState.IsValid)
