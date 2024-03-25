@@ -5,9 +5,14 @@
             if (this.checked) {
                 document.getElementById("InMenu").value = true;
             } else {
-                $('#DropDownBevanda').hide();
-                $('#DropDownPatatine').hide();
                 document.getElementById("check").value = false;
+            }
+        });
+        $('#PaninoMese1').change(function () {
+            if (this.checked) {
+                document.getElementById("PaninoMese1").value = true;
+            } else {
+                document.getElementById("PaninoMese1").value = false;
             }
         });
     });
@@ -52,7 +57,7 @@ else
         {
             <div class="input-group mb-3">
                 <span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-currency-euro" style="color:white"></i></span>
-                <input type="text" class="form-control" id="Prezzo" name="Prezzo" value="0.00" required />
+                <input type="text" class="form-control" id="Prezzo" name="Prezzo" placeholder="0,00" required />
             </div>
         }
     </div>
@@ -125,23 +130,27 @@ else
             {
                 <label for="InMenu" class="form-label">In menu:</label>
                 <input type="checkbox" class="form-check-input" id="InMenu1" role="switch" checked>
+                <input type="hidden" id="InMenu" name="InMenu" value="true" />
             }
             else
             {
                 <label for="InMenu" class="form-label">In menu:</label>
                 <input type="checkbox" class="form-check-input" id="InMenu1" role="switch" />
+                <input type="hidden" id="InMenu" name="InMenu" value="" />
             }
             <br />
             @if (Model.PaninoMese)
             {
                 <label for="PaninoMese" class="form-label">Piatto del mese:</label>
                 <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch"  checked>
+                <input type="hidden" id="PaninoMese" name="PaninoMese" value="true" />
             }
             else
             {
 
                 <label for="PaninoMese" class="form-label">Piatto del mese:</label>
                 <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch" />
+                <input type="hidden" id="PaninoMese" name="PaninoMese" value="" />
             }
         }
         else
@@ -151,8 +160,9 @@ else
             <br />
             <label for="PaninoMese" class="form-label">Piatto del mese:</label>
             <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch"  />
+            <input type="hidden" id="InMenu" name="InMenu" value="" />
+            <input type="hidden" id="PaninoMese" name="PaninoMese" value="" />
         }
-        <input type="hidden" id="InMenu" name="InMenu" value="" />
-        <input type="hidden" id="PaninoMese" name="PaninoMese" value="" />
+        
     </div>
 </div>
