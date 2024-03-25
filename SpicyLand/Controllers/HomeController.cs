@@ -218,7 +218,7 @@ namespace SpicyLand.Controllers
 		[HttpGet]
 		public IActionResult Menu()
 		{
-			IEnumerable<PaninoEntity> Panino = _db.Panino.Where(x => x.InMenu == true).ToList();
+			IEnumerable<PaninoEntity> Panino = _db.Panino.Where(x => x.InMenu == true).OrderBy(x=>x.Prezzo).ToList();
 			return View(Panino);
 		}
 
@@ -274,7 +274,7 @@ namespace SpicyLand.Controllers
 
 		public IActionResult EditMenu()
 		{
-			IEnumerable<PaninoEntity> Panino = _db.Panino.ToList();
+			IEnumerable<PaninoEntity> Panino = _db.Panino.OrderBy(x=>x.Nome).ToList();
 
 			if (!String.IsNullOrEmpty(HttpContext?.Session.GetString("UserID")))
 			{

@@ -55,29 +55,30 @@
         <div class="row">
             <div class="col-md-12 bg-opacity-50">
                 <MiniTitolo>Notizie</MiniTitolo>
-                <ul class="list-unstyled ">
-                    @if (Model != null)
-                    {
-                        <hr />
-                        @foreach (var x in Model)
-                        { 
-                            <li class="media">
-                                <img class="mr-3 w-25 h-25" src="/Images/Logo/logo.png" alt="Generic placeholder image">
-                                <div class="media-body">
-                                    <h5 class="mt-0 mb-1">@x.TitoloNotizia</h5>
-                                    (@x.DataInserimento)
-                                    <br />
-                                    @x.CorpoNotizia
-                                </div>
-                            </li>
-                            <hr />
+                <div class="card">
+                    <ul class="list-unstyled card-body">
+                        @if (Model != null)
+                        {
+                            @foreach (var x in Model)
+                            {
+                                <li class="media">
+                                    <img class="mr-3 w-25 h-25" src="/Images/Logo/logo.png" alt="Generic placeholder image">
+                                    <div class="media-body">
+                                        <h5 class="mt-0 mb-1">@x.TitoloNotizia</h5>
+                                        (@x.DataInserimento)
+                                        <br />
+                                        @x.CorpoNotizia
+                                    </div>
+                                </li>
+                                <hr />
+                            }
                         }
-                    }
-
-                </ul>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+
 }
 else
 {
