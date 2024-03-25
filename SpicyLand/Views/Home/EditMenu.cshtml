@@ -21,6 +21,30 @@
                 });
         });
     });
+
+    function uploadImage() {
+        const input = document.getElementById('Immagine');
+        const file = input.files[0];
+        // Aggiungi altri campi se necessario
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = function (event) {
+                // const arrayBuffer = event.target.result;
+                // const byteArray = new Uint8Array(arrayBuffer);
+                // document.getElementById("Immagine").value = byteArray;
+                // console.log(byteArray);
+                // console.log(file.name);
+                document.getElementById("PathImage").value = file.name;
+                console.log(document.getElementById("PathImage").value);
+            }
+        }
+        else {
+            alert("Formato non valido!!!");
+        }
+    }
 </script>
 <div class="Container">
     <div class="row">
@@ -104,7 +128,7 @@
                 <h4 class="modal-title" id="modalTitle"></h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form method="post" action="AddOrEditHamburger">
+            <form method="post" action="AddOrEditPanino" enctype="multipart/form-data">
                 <!-- Modal body -->
                 <div class="modal-body" id="modalBody">
                     <!-- Il corpo della modale sarà popolato dinamicamente tramite AJAX -->
@@ -112,7 +136,7 @@
                 <!-- Modal footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
-                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Salva</button>
+                    <button type="submit" class="btn btn-primary" >Salva</button>
                 </div>
             </form>
         </div>
