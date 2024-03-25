@@ -10,7 +10,6 @@ namespace SpicyLand.Models
         public string Descrizione { get; set; } = "";
         public double Prezzo { get; set;}
         public DateTime DataCreazione { get; set;}
-        public required Byte[] Immagine { get; set;}
         public string PathImage { get; set; } = "";
         public bool InMenu { get; set;}
         public bool PaninoMese { get; set;}
