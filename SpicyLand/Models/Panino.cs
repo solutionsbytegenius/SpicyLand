@@ -1,4 +1,6 @@
-﻿namespace SpicyLand.Models
+﻿using System.Drawing;
+
+namespace SpicyLand.Models
 {
     public class Panino
     {
@@ -7,24 +9,14 @@
         public  string Descrizione { get; set; }
         public double Prezzo { get; set; }
         public DateTime DataCreazione { get; set; }
-        public  Byte[] Immagine { get; set; }
+        public IFormFile Immagine { get; set; }
         public  string PathImage { get; set; }
         public bool InMenu { get; set; }
         public bool PaninoMese { get; set; }
         public string Categoria { get; set; } = "";
 
-        public Panino()
-        {
-            PaninoID = Guid.NewGuid();
-            Nome = "";
-            Descrizione = "";
-            Prezzo = 0.0;
-            DataCreazione = DateTime.Now;
-            Immagine = new byte[0];
-            PathImage = "";
-            InMenu = false;
-            PaninoMese = false;
-            Categoria = "";
-        }
+        public bool New {  get; set; } =false;
+
+       
     }
 }
