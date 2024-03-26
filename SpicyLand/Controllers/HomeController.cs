@@ -55,8 +55,8 @@ namespace SpicyLand.Controllers
                 Nome = Pan.Nome,
                 Descrizione = Pan.Descrizione,
                 Categoria = Pan.Categoria,
-                InMenu = Pan.InMenu,
-                PaninoMese = Pan.PaninoMese,
+                InMenu = Pan.InMenu? "on":"",
+                PaninoMese = Pan.PaninoMese? "on":"",
                 Prezzo = Pan.Prezzo,
                 PathImage = Pan.PathImage
             };
@@ -396,11 +396,29 @@ namespace SpicyLand.Controllers
             }
             return RedirectToAction("Ordinazioni");
         }
-
+        
         [HttpPost]
         public IActionResult AddOrEditPanino(Panino p)
         {
-            if (p.Immagine != null && p.Immagine.Length > 0)
+            var InMenu = false;
+            if (!String.IsNullOrEmpty(p.InMenu))
+            {
+                if (p.InMenu == "on")
+                {
+                    InMenu = true;
+                }
+            }
+
+			var PaninoMese = false;
+			if (!String.IsNullOrEmpty(p.PaninoMese))
+			{
+				if (p.PaninoMese == "on")
+				{
+					PaninoMese = true;
+				}
+			}
+
+			if (p.Immagine != null && p.Immagine.Length > 0)
             {
                 if (p.Immagine != null && p.Immagine.Length > 0)
                 {
@@ -439,9 +457,9 @@ namespace SpicyLand.Controllers
                 command.Parameters.AddWithValue("@PaninoID", p.PaninoID);
                 command.Parameters.AddWithValue("@Nome", p.Nome);
                 command.Parameters.AddWithValue("@Prezzo", p.Prezzo);
-                command.Parameters.AddWithValue("@PaninoMese", p.PaninoMese);
+                command.Parameters.AddWithValue("@PaninoMese", PaninoMese);
                 command.Parameters.AddWithValue("@PathImage", p.PathImage);
-                command.Parameters.AddWithValue("@InMenu", p.InMenu);
+                command.Parameters.AddWithValue("@InMenu", InMenu);
                 command.Parameters.AddWithValue("@Descrizione", p.Descrizione);
                 command.Parameters.AddWithValue("@Categoria", p.Categoria);
                 command.Parameters.AddWithValue("@Add", p.New);

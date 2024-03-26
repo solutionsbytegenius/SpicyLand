@@ -1,168 +1,163 @@
 ﻿@model Panino
 <script>
-    $(document).ready(function () {
-        $('#InMenu1').change(function () {
-            if (this.checked) {
-                document.getElementById("InMenu").value = true;
-            } else {
-                document.getElementById("check").value = false;
-            }
-        });
-        $('#PaninoMese1').change(function () {
-            if (this.checked) {
-                document.getElementById("PaninoMese1").value = true;
-            } else {
-                document.getElementById("PaninoMese1").value = false;
-            }
-        });
-    });
-    $('#modalTitle').text(document.getElementById("Nome1").title);
+	$(document).ready(function () {
+	// 	$('#InMenu1').change(function () {
+	// 		if (this.checked) {
+	// 			document.getElementById("InMenu").value = true;
+	// 		} else {
+	// 			document.getElementById("check").value = false;
+	// 		}
+	// 	});
+	// 	$('#PaninoMese1').change(function () {
+	// 		if (this.checked) {
+	// 			document.getElementById("PaninoMese").value = true;
+	// 		} else {
+	// 			document.getElementById("PaninoMese").value = false;
+	// 		}
+	// 	});
+	// });
+	 $('#modalTitle').text(document.getElementById("Nome1").title);
+	// if ($('#InMenu1').checked) {
+	// 	document.getElementById("InMenu").value = true;
+	// }
+	// else {
+	// 	document.getElementById("InMenu").value = false;
+	// }
+
+	// if ($('#PaninoMese1').checked) {
+	// 	document.getElementById("PaninoMese").value = true;
+	// }
+	// else {
+	// 	document.getElementById("PaninoMese").value = false;
+	// }
 
 </script>
 @if (Model != null)
 {
 
-    <p style="display:none" id="Nome1" title="@Model.Nome"></p>
+	<p style="display:none" id="Nome1" title="@Model.Nome"></p>
 }
 else
 {
-    <p style="display:none" id="Nome1" title="Nuovo Piatto"></p>
+	<p style="display:none" id="Nome1" title="Nuovo Piatto"></p>
 }
 <div class="row">
-    <div class="col-md-6">
+	<div class="col-md-6">
 
-        <label for="Nome" class="form-label">Piatto:</label>
-        @if (Model != null)
-        {
-            <input type="hidden" id="PaninoID" name="PaninoID" value="@Model.PaninoID" />
-            <input type="hidden" id="New" name="New" value="false" />
-            <input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome" required />
-        }
-        else
-        {
-            <input type="text" class="form-control" id="Nome" name="Nome" placeholder="Inserisci nome piatto" required />
-            <input type="hidden" id="New" name="New" value="true" />
-        }
-    </div>
-    <div class="col-md-6">
-        <label for="Prezzo" class="form-label">Prezzo:</label>
-        @if (Model != null)
-        {
-            <div class="input-group mb-3">
-                <span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-currency-euro" style="color:white"></i></span>
-                <input type="text" class="form-control" id="Prezzo" name="Prezzo" value="@Model.Prezzo" required />
-            </div>
-        }
-        else
-        {
-            <div class="input-group mb-3">
-                <span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-currency-euro" style="color:white"></i></span>
-                <input type="text" class="form-control" id="Prezzo" name="Prezzo" placeholder="0,00" required />
-            </div>
-        }
-    </div>
+		<label for="Nome" class="form-label">Piatto:</label>
+		@if (Model != null)
+		{
+			<input type="hidden" id="PaninoID" name="PaninoID" value="@Model.PaninoID" />
+			<input type="hidden" id="New" name="New" value="false" />
+			<input type="text" class="form-control" id="Nome" name="Nome" value="@Model.Nome" required />
+		}
+		else
+		{
+			<input type="text" class="form-control" id="Nome" name="Nome" placeholder="Inserisci nome piatto" required />
+			<input type="hidden" id="New" name="New" value="true" />
+		}
+	</div>
+	<div class="col-md-6">
+		<label for="Prezzo" class="form-label">Prezzo:</label>
+		@if (Model != null)
+		{
+			<div class="input-group mb-3">
+				<span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-currency-euro" style="color:white"></i></span>
+				<input type="text" class="form-control" id="Prezzo" name="Prezzo" value="@Model.Prezzo" required />
+			</div>
+		}
+		else
+		{
+			<div class="input-group mb-3">
+				<span class="input-group-text bg-primary" id="basic-addon1"><i class="bi bi-currency-euro" style="color:white"></i></span>
+				<input type="text" class="form-control" id="Prezzo" name="Prezzo" placeholder="0,00" required />
+			</div>
+		}
+	</div>
 </div>
 <div class="row">
-    <div class="col-md-12">
+	<div class="col-md-12">
 
-        <label for="PaninoMese" class="form-label">Descrizione:</label>
-        @if (Model != null)
-        {
-            <textarea class="form-control" rows="3" id="Descrizione" name="Descrizione" placeholder="Inserisci descrizione" required>@Model.Descrizione</textarea>
-        }
-        else
-        {
-            <textarea class="form-control" rows="3" id="Descrizione" name="Descrizione" placeholder="Inserisci descrizione" required></textarea>
-        }
-    </div>
-</div>
-<br />
-<div class="row">
-    <div class="col-md-12">
-        <div class="input-group mb-3">
-            @if (Model != null)
-            {
-                <input type="file" class="form-control" name="Immagine" id="Immagine">
-                <input type="hidden" name="PathImage" id="PathImage" value="@Model.PathImage" />
-                <button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage">Upload</button>
-            }
-            else
-            {
-                <input type="file" class="form-control" name="Immagine" id="Immagine" required>
-                <input type="hidden" name="PathImage" id="PathImage" value="" />
-                <button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage" required>Upload</button>
-            }
-        </div>
-    </div>
+		<label for="PaninoMese" class="form-label">Descrizione:</label>
+		@if (Model != null)
+		{
+			<textarea class="form-control" rows="3" id="Descrizione" name="Descrizione" placeholder="Inserisci descrizione" required>@Model.Descrizione</textarea>
+		}
+		else
+		{
+			<textarea class="form-control" rows="3" id="Descrizione" name="Descrizione" placeholder="Inserisci descrizione" required></textarea>
+		}
+	</div>
 </div>
 <br />
 <div class="row">
-    <div class="col-md-6">
-        @if (Model != null)
-        {
-            <div class="dropdown" id="DropDownCategoria">
-                <select class="form-select btn btn-primary dropdown-toggle" name="Categoria" aria-label="Default select example">
-                    <option value="@Model.Categoria" selected>@Model.Categoria</option>
-                    <option value="Carne">Carne</option>
-                    <option value="Pesce">Pesce</option>
-                    <option value="Dolce">Dolce</option>
-                    <option value="Vegan">Vegan</option>
-                </select>
-            </div>
-        }
-        else
-        {
-            <div class="dropdown" id="DropDownCategoria">
-                <select class="form-select btn btn-primary dropdown-toggle" name="Categoria" aria-label="Default select example">
-                    <option value="" selected>Categoria</option>
-                    <option value="Carne">Carne</option>
-                    <option value="Pesce">Pesce</option>
-                    <option value="Dolce">Dolce</option>
-                    <option value="Vegan">Vegan</option>
-                </select>
-            </div>
-        }
-    </div>
-    <div class="col-md-6">
-        @if (Model != null)
-        {
-            @if (Model.InMenu)
-            {
-                <label for="InMenu" class="form-label">In menu:</label>
-                <input type="checkbox" class="form-check-input" id="InMenu1" role="switch" checked>
-                <input type="hidden" id="InMenu" name="InMenu" value="true" />
-            }
-            else
-            {
-                <label for="InMenu" class="form-label">In menu:</label>
-                <input type="checkbox" class="form-check-input" id="InMenu1" role="switch" />
-                <input type="hidden" id="InMenu" name="InMenu" value="" />
-            }
-            <br />
-            @if (Model.PaninoMese)
-            {
-                <label for="PaninoMese" class="form-label">Piatto del mese:</label>
-                <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch"  checked>
-                <input type="hidden" id="PaninoMese" name="PaninoMese" value="true" />
-            }
-            else
-            {
-
-                <label for="PaninoMese" class="form-label">Piatto del mese:</label>
-                <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch" />
-                <input type="hidden" id="PaninoMese" name="PaninoMese" value="" />
-            }
-        }
-        else
-        {
-            <label for="InMenu" class="form-label">In menu:</label>
-            <input type="checkbox" class="form-check-input" id="InMenu1" role="switch" />
-            <br />
-            <label for="PaninoMese" class="form-label">Piatto del mese:</label>
-            <input type="checkbox" class="form-check-input" id="PaninoMese1" role="switch"  />
-            <input type="hidden" id="InMenu" name="InMenu" value="" />
-            <input type="hidden" id="PaninoMese" name="PaninoMese" value="" />
-        }
-        
-    </div>
+	<div class="col-md-12">
+		<div class="input-group mb-3">
+			@if (Model != null)
+			{
+				<input type="file" class="form-control" name="Immagine" id="Immagine">
+				<input type="hidden" name="PathImage" id="PathImage" value="@Model.PathImage" />
+				<button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage">Upload</button>
+			}
+			else
+			{
+				<input type="file" class="form-control" name="Immagine" id="Immagine" required>
+				<input type="hidden" name="PathImage" id="PathImage" value="" />
+				<button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage" required>Upload</button>
+			}
+		</div>
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-md-6">
+		@if (Model != null)
+		{
+			<div class="dropdown" id="DropDownCategoria">
+				<select class="form-select btn btn-primary dropdown-toggle" name="Categoria" aria-label="Default select example">
+					<option value="@Model.Categoria" selected>@Model.Categoria</option>
+					<option value="Carne">Carne</option>
+					<option value="Pesce">Pesce</option>
+					<option value="Dolce">Dolce</option>
+					<option value="Vegan">Vegan</option>
+				</select>
+			</div>
+		}
+		else
+		{
+			<div class="dropdown" id="DropDownCategoria">
+				<select class="form-select btn btn-primary dropdown-toggle" name="Categoria" aria-label="Default select example">
+					<option value="" selected>Categoria</option>
+					<option value="Carne">Carne</option>
+					<option value="Pesce">Pesce</option>
+					<option value="Dolce">Dolce</option>
+					<option value="Vegan">Vegan</option>
+				</select>
+			</div>
+		}
+	</div>
+	<div class="col-md-6">
+		<label for="InMenu1" class="form-label">In menu:</label>
+		@if (Model != null && !String.IsNullOrEmpty(Model.InMenu))
+		{
+			<input type="checkbox" class="form-check-input" name="InMenu" id="InMenu1" role="switch" checked />
+		}
+		else
+		{
+			<input type="checkbox" class="form-check-input" name="InMenu" id="InMenu1" role="switch" />
+		}
+		<br />
+		<label for="PaninoMese1" class="form-label">Piatto del mese:</label>
+		@if (Model != null && !String.IsNullOrEmpty(Model.PaninoMese))
+		{
+			<input type="checkbox" class="form-check-input" name="PaninoMese" id="PaninoMese1" role="switch" checked />
+			
+		}
+		else
+		{
+			<input type="checkbox" class="form-check-input" name="PaninoMese" id="PaninoMese1" role="switch" />
+		}
+		@* <input type="hidden" id="InMenu" name="InMenu" value="" /> *@
+		@* <input type="hidden" id="PaninoMese" name="PaninoMese" value="" /> *@
+	</div>
 </div>
