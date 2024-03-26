@@ -110,13 +110,20 @@ namespace SpicyLand.Controllers
 
             return PartialView("ModalEditNews",notizia);
         }
+
+        public IActionResult ShowNews(Guid NewsID)
+        {
+            NewsEntity news = _db.News.FirstOrDefault(x=>x.NewsID == NewsID);
+            news.ImmaginePath = news.ImmaginePath.Substring(7);
+            return PartialView("ModalNews",news);
+        }
         #endregion
 
         #region Pages
         public IActionResult Index()
         {
             HttpContext.Session.SetString("Count", "0");
-            IEnumerable<NewsEntity> News = _db.News.Where(x => x.ScadenzaNotizia <= DateTime.Now).ToList();
+            IEnumerable<NewsEntity> News = _db.News.Where(x => x.Scaduta==false && x.Visibile==true && x.ScadenzaNotizia>=DateTime.Now).ToList();
             if (News.Any())
                 return View(News);
             return View();
@@ -142,6 +149,7 @@ namespace SpicyLand.Controllers
             HttpContext.Session.Clear();
             return Redirect("Index");
         }
+
         public IActionResult Contatti()
         {
             IEnumerable<OrarioEntity> orario = _db.Orario.OrderBy(x => x.NumeroGiorno).ToList();
@@ -254,6 +262,12 @@ namespace SpicyLand.Controllers
                 return View("Carrello", CartCollection);
             }
             return View("Carrello");
+        }
+
+        public IActionResult News()
+        {
+            IEnumerable<NewsEntity> news = _db.News.Where(x => x.Scaduta == false && x.Visibile == true && x.ScadenzaNotizia >= DateTime.Now).OrderByDescending(x=>x.DataInserimento).ToList();
+            return View("News",news);
         }
         #endregion
 

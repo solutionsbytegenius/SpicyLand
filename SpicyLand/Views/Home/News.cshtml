@@ -1,0 +1,82 @@
+﻿@model IEnumerable<NewsEntity>
+@{
+    ViewData["Title"] = "Notizie";
+}
+
+<script>
+    $(document).ready(function () {
+        $('.open-modal').click(function () {
+            var guid = $(this).data('guid');
+            console.log($(this).data());
+            $.get('/Home/ShowNews', { NewsID: guid })
+                .done(function (data) {
+                    $('#modalTitle').text(data.Nome);
+                    $('#modalBody').html(data);
+                    $('#myModal').modal('show');
+                })
+                .fail(function (xhr, status, error) {
+                    console.error("Errore durante il caricamento dei dati della modale:", error);
+                });
+
+        });
+    });
+</script>
+
+<div class="Container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <center>
+                <Titolo>Notizie</Titolo>
+            </center>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<br />
+
+<div class="container">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            <div class="col-md-3 ">
+                <div class="card" style="width: 18rem; margin-bottom:20px;">
+                    <img class="card-img-top" src="@x.ImmaginePath" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">@x.TitoloNotizia</h5>
+                        <p class="card-text">
+                            (@x.DataInserimento)
+                            <br />
+                            @x.CorpoNotizia.Split('.')[0]
+                        </p>
+                        <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalNews" data-guid="@x.NewsID">
+                            Dettagli
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="ModalNews">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Il corpo della modale sarà popolato dinamicamente tramite AJAX -->
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
