@@ -1,0 +1,102 @@
+﻿@model Notizie
+<script>
+	$('#modalTitle').text(document.getElementById("Nome1").title);
+
+</script>
+@if (Model != null)
+{
+
+	<p style="display:none" id="Nome1" title="@Model.TitoloNotizia"></p>
+}
+else
+{
+	<p style="display:none" id="Nome1" title="Nuova Notizia"></p>
+}
+<div class="row">
+	<div class="col-md-12">
+
+		<label for="TitoloNotizia" class="form-label">Titolo:</label>
+		@if (Model != null)
+		{
+			<input type="hidden" id="NewsID" name="NewsID" value="@Model.NewsID" />
+			<input type="hidden" id="New" name="New" value="false" />
+			<input type="text" class="form-control" id="TitoloNotizia" name="TitoloNotizia" value="@Model.TitoloNotizia" required />
+		}
+		else
+		{
+			<input type="text" class="form-control" id="TitoloNotizia" name="TitoloNotizia" placeholder="Inserisci Titolo Notizia" required />
+			<input type="hidden" id="New" name="New" value="true" />
+		}
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+
+		<label for="CorpoNotizia" class="form-label">Corpo Notizia:</label>
+		@if (Model != null)
+		{
+			<textarea class="form-control" rows="3" id="CorpoNotizia" name="CorpoNotizia" placeholder="Inserisci Corpo Notizia" required>@Model.CorpoNotizia</textarea>
+		}
+		else
+		{
+			<textarea class="form-control" rows="3" id="CorpoNotizia" name="CorpoNotizia" placeholder="Inserisci Corpo Notizia" required></textarea>
+		}
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-md-12">
+		<div class="input-group mb-3">
+			@if (Model != null)
+			{
+				<input type="file" class="form-control" name="Immagine" id="Immagine">
+				<input type="hidden" name="ImmaginePath" id="PathImage" value="@Model.ImmaginePath" />
+				<button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage">Upload</button>
+			}
+			else
+			{
+				<input type="file" class="form-control" name="Immagine" id="Immagine" required>
+				<input type="hidden" name="PathImage" id="PathImage" value="" />
+				<button class="btn btn-primary" onclick="uploadImage()" type="button" id="ButtonImage" required>Upload</button>
+			}
+		</div>
+	</div>
+</div>
+<br />
+<div class="row">
+	<div class="col-md-4">
+		<label for="Visibile" class="form-label">Visibile: </label>
+		@if (Model != null && !String.IsNullOrEmpty(Model.Visibile))
+		{
+			<input type="checkbox" class="form-check-input" name="Visibile" id="Visibile" role="switch" checked />
+		}
+		else
+		{
+			<input type="checkbox" class="form-check-input" name="Visibile" id="Visibile" role="switch" />
+		}
+	</div>
+	<div class="col-md-4">
+		<label for="Scaduta" class="form-label">Scaduta:</label>
+		@if (Model != null && !String.IsNullOrEmpty(Model.Scaduta))
+		{
+			<input type="checkbox" class="form-check-input" name="Scaduta" id="Scaduta" role="switch" checked />
+
+		}
+		else
+		{
+			<input type="checkbox" class="form-check-input" name="Scaduta" id="Scaduta" role="switch" />
+		}
+	</div>
+	<div class="col-md-4">
+		<label for="InPrimoPiano" class="form-label">In Piano:</label>
+		@if (Model != null && !String.IsNullOrEmpty(Model.InPrimoPiano))
+		{
+			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" checked />
+
+		}
+		else
+		{
+			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" />
+		}
+	</div>
+</div>

@@ -1,0 +1,158 @@
+﻿@{
+    ViewData["Title"] = "Notizie";
+}
+
+<script>
+    $(document).ready(function () {
+        $('.open-modal').click(function () {
+            var num = $(this).data('guid');
+            console.log(num);
+            $.get('/Home/ShowEditModalNews', { Scelta: num })
+                .done(function (data) {
+                    console.log(data);
+                    console.log(data.Nome);
+                    $('#modalTitle').text(data.Nome);
+                    $('#modalBody').html(data);
+                    $('#myModal').modal('show');
+                })
+                .fail(function (xhr, status, error) {
+                    console.error("Errore durante il caricamento dei dati della modale:", error);
+                });
+        });
+    });
+
+    function uploadImage() {
+        const input = document.getElementById('Immagine');
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+
+            reader.onload = function (event) {
+                document.getElementById("PathImage").value = file.name;
+                console.log(document.getElementById("PathImage").value);
+            }
+        }
+        else {
+            alert("Formato non valido!!!");
+        }
+    }
+</script>
+
+
+<div class="Container">
+    <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <center>
+                <Titolo>Notizie</Titolo>
+            </center>
+        </div>
+        <div class="col-md-3"></div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <div class="table-responsive ">
+            <table class="table table-striped table-light">
+                <thead>
+                    <tr>
+                        <th>Titolo Notizia</th>
+                        <th>Corpo</th>
+                        <th>Data Inserimento</th>
+                        <th>In Primo Piano</th>
+                        <th>Attiva</th>
+                        <th>Scaduta</th>
+                        <th>Data Scadenza</th>
+                        <th>
+                            <button type="button" class="btn btn-success open-modal" data-bs-toggle="modal" data-bs-target="#ModalEditNews" data-guid="Add">
+                                <i class="bi bi-plus-circle"></i>
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var x in Model)
+                    {
+                        <tr>
+                            <td>@x.TitoloNotizia</td>
+                            <td>@x.CorpoNotizia</td>
+                            <td>@x.DataInserimento</td>
+                            <td>
+                                @if (x.InPrimoPiano == true)
+                                {
+                                    <p>Attiva</p>
+                                }
+                                else
+                                {
+                                    <p>non attiva</p>
+                                }
+                            </td>
+                            <td>
+                                @if (x.Visibile == true)
+                                {
+                                    <p>Attiva</p>
+                                }
+                                else
+                                {
+                                    <p>non attiva</p>
+                                }
+                            </td>
+                            <td>
+                                @if (x.Scaduta == true)
+                                {
+                                    <p>Scaduta</p>
+                                }
+                                else
+                                {
+                                }
+                            </td>
+                            <td>
+                                @if (x.ScadenzaNotizia != null)
+                                {
+                                    @x.ScadenzaNotizia;
+                                }
+                                else
+                                {
+                                }
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalEditNews" data-guid="@x.NewsID">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="ModalEditNews">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form method="post" action="AddOrEditNews" enctype="multipart/form-data">
+                <!-- Modal body -->
+                <div class="modal-body" id="modalBody">
+                    <!-- Il corpo della modale sarà popolato dinamicamente tramite AJAX -->
+                </div>
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
