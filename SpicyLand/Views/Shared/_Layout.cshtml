@@ -40,6 +40,12 @@
                             }
                             else
                             {
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="EditNews"><i class="bi bi-newspaper"></i> Modifica Notizie</a>
+                            }
+                        </li>
+                        <li class="nav-item">
+                            @if (String.IsNullOrEmpty(@Accessor.HttpContext?.Session.GetString("UserID")))
+                            {
                                 <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="News"><i class="bi bi-newspaper"></i> Notizie</a>
                             }
                         </li>

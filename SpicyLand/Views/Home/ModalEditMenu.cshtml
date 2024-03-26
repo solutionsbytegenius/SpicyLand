@@ -1,36 +1,7 @@
 ﻿@model Panino
 <script>
-	$(document).ready(function () {
-	// 	$('#InMenu1').change(function () {
-	// 		if (this.checked) {
-	// 			document.getElementById("InMenu").value = true;
-	// 		} else {
-	// 			document.getElementById("check").value = false;
-	// 		}
-	// 	});
-	// 	$('#PaninoMese1').change(function () {
-	// 		if (this.checked) {
-	// 			document.getElementById("PaninoMese").value = true;
-	// 		} else {
-	// 			document.getElementById("PaninoMese").value = false;
-	// 		}
-	// 	});
-	// });
 	 $('#modalTitle').text(document.getElementById("Nome1").title);
-	// if ($('#InMenu1').checked) {
-	// 	document.getElementById("InMenu").value = true;
-	// }
-	// else {
-	// 	document.getElementById("InMenu").value = false;
-	// }
-
-	// if ($('#PaninoMese1').checked) {
-	// 	document.getElementById("PaninoMese").value = true;
-	// }
-	// else {
-	// 	document.getElementById("PaninoMese").value = false;
-	// }
-
+	
 </script>
 @if (Model != null)
 {
@@ -157,7 +128,5 @@ else
 		{
 			<input type="checkbox" class="form-check-input" name="PaninoMese" id="PaninoMese1" role="switch" />
 		}
-		@* <input type="hidden" id="InMenu" name="InMenu" value="" /> *@
-		@* <input type="hidden" id="PaninoMese" name="PaninoMese" value="" /> *@
 	</div>
 </div>

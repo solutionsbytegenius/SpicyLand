@@ -55,8 +55,8 @@ namespace SpicyLand.Controllers
                 Nome = Pan.Nome,
                 Descrizione = Pan.Descrizione,
                 Categoria = Pan.Categoria,
-                InMenu = Pan.InMenu? "on":"",
-                PaninoMese = Pan.PaninoMese? "on":"",
+                InMenu = Pan.InMenu ? "on" : "",
+                PaninoMese = Pan.PaninoMese ? "on" : "",
                 Prezzo = Pan.Prezzo,
                 PathImage = Pan.PathImage
             };
@@ -85,6 +85,30 @@ namespace SpicyLand.Controllers
                 return PartialView("OrderDetail", ordine);
             }
             return RedirectToAction("OrderDetail");
+        }
+
+        public IActionResult ShowEditModalNews(string Scelta)
+        {
+            if (!String.IsNullOrEmpty(Scelta) && Scelta == "Add")
+            {
+                return PartialView("ModalEditNews");
+            }
+            Guid NewsID = new Guid(Scelta);
+#pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+            NewsEntity news = _db.News.FirstOrDefault(x => x.NewsID == NewsID);
+            Notizie notizia = new Notizie()
+            {
+                NewsID = news.NewsID,
+                TitoloNotizia = news.TitoloNotizia,
+                CorpoNotizia = news.CorpoNotizia,
+                ImmaginePath = news.ImmaginePath,
+                InPrimoPiano = news.InPrimoPiano ? "on" : "",
+                Scaduta = news.Scaduta? "on":"",
+                Visibile = news.Visibile? "on":""
+            };
+#pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
+
+            return PartialView("ModalEditNews",notizia);
         }
         #endregion
 
@@ -198,13 +222,13 @@ namespace SpicyLand.Controllers
             }
         }
 
-        public IActionResult News()
+        public IActionResult EditNews()
         {
             IEnumerable<NewsEntity> News = _db.News.ToList();
 
             if (!String.IsNullOrEmpty(HttpContext?.Session.GetString("UserID")))
             {
-                return View(News);
+                return View("EditNews", News);
             }
             else
             {
@@ -396,7 +420,7 @@ namespace SpicyLand.Controllers
             }
             return RedirectToAction("Ordinazioni");
         }
-        
+
         [HttpPost]
         public IActionResult AddOrEditPanino(Panino p)
         {
@@ -409,16 +433,16 @@ namespace SpicyLand.Controllers
                 }
             }
 
-			var PaninoMese = false;
-			if (!String.IsNullOrEmpty(p.PaninoMese))
-			{
-				if (p.PaninoMese == "on")
-				{
-					PaninoMese = true;
-				}
-			}
+            var PaninoMese = false;
+            if (!String.IsNullOrEmpty(p.PaninoMese))
+            {
+                if (p.PaninoMese == "on")
+                {
+                    PaninoMese = true;
+                }
+            }
 
-			if (p.Immagine != null && p.Immagine.Length > 0)
+            if (p.Immagine != null && p.Immagine.Length > 0)
             {
                 if (p.Immagine != null && p.Immagine.Length > 0)
                 {
@@ -445,7 +469,7 @@ namespace SpicyLand.Controllers
                     }
                     catch (Exception ex)
                     {
-                        
+
                     }
                 }
             }
@@ -469,10 +493,89 @@ namespace SpicyLand.Controllers
             return RedirectToAction("EditMenu");
         }
 
+        [HttpPost]
+        public IActionResult AddOrEditNews(Notizie n)
+        {
+			var Scaduta = false;
+			if (!String.IsNullOrEmpty(n.Scaduta))
+			{
+				if (n.Scaduta == "on")
+				{
+					Scaduta = true;
+				}
+			}
 
-        #region Comments
+			var Visibile = false;
+			if (!String.IsNullOrEmpty(n.Visibile))
+			{
+				if (n.Visibile == "on")
+				{
+					Visibile = true;
+				}
+			}
 
-        /*
+			var Primo = false;
+			if (!String.IsNullOrEmpty(n.InPrimoPiano))
+			{
+				if (n.InPrimoPiano == "on")
+				{
+					Primo = true;
+				}
+			}
+
+			if (n.Immagine != null && n.Immagine.Length > 0)
+			{
+				if (n.Immagine != null && n.Immagine.Length > 0)
+				{
+					try
+					{
+						using (var memoryStream = new MemoryStream())
+						{
+							// Posiziona il MemoryStream all'inizio dei dati
+							memoryStream.Position = 0;
+
+							// Copia i dati dell'immagine nel MemoryStream
+							n.Immagine.CopyTo(memoryStream);
+
+							// Crea un'istanza di Image dal MemoryStream
+							using (var image = Image.FromStream(memoryStream))
+							{
+								// Imposta il percorso di destinazione (ad esempio wwwroot)
+								var imagePath = Path.Combine("wwwroot", "Images", "Notizie", n.ImmaginePath);
+								n.ImmaginePath = imagePath;
+								// Salva l'immagine sul disco
+								image.Save(imagePath);
+							}
+						}
+					}
+					catch (Exception ex)
+					{
+
+					}
+				}
+			}
+			using (SqlConnection connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				SqlCommand command = new SqlCommand("[sp_ResyncNews]", connection);
+				command.CommandType = CommandType.StoredProcedure;
+				command.Parameters.AddWithValue("@NewsID", n.NewsID);
+				command.Parameters.AddWithValue("@Titolo", n.TitoloNotizia);
+				command.Parameters.AddWithValue("@Corpo", n.CorpoNotizia);
+				command.Parameters.AddWithValue("@Visibile", Visibile);
+				command.Parameters.AddWithValue("@PathImage", n.ImmaginePath);
+				command.Parameters.AddWithValue("@Scaduta", Scaduta);
+				command.Parameters.AddWithValue("@PrimoPiano", Primo);
+				command.Parameters.AddWithValue("@Add", n.New);
+				command.ExecuteNonQuery();
+				connection.Close();
+			}
+			return RedirectToAction("EditNews");
+		}
+
+		#region Comments
+
+		/*
          public IActionResult AddOrEditPanino([FromBody] PaninoWithImageDto paninoDto)
         {
             // Esegui le operazioni necessarie per salvare l'immagine e i dati del panino nel database o in un file system
@@ -512,13 +615,13 @@ namespace SpicyLand.Controllers
          
          */
 
-        #endregion
+		#endregion
 
 
-        #endregion
+		#endregion
 
-        #region default methods
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+		#region default methods
+		public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
         {
             _db = db;
             _logger = logger;

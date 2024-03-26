@@ -13,5 +13,6 @@ namespace SpicyLand.Models
         public string ImmaginePath { get; set; }
         public DateTime? ScadenzaNotizia { get; set; }
         public bool Scaduta {  get; set; }
+        public bool InPrimoPiano {  get; set; }
     }
 }
