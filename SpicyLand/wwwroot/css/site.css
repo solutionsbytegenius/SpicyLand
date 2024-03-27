@@ -195,4 +195,16 @@ MiniTitolo {
         background-position: 0% 50%;
     }
 }
- 
+
+.promo-star {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    color: red;
+    font-size: 30px;
+}
+
+.card-img-top-card {
+    width: 287px; /* Imposta la larghezza desiderata */
+    height: 200px; /* Imposta l'altezza desiderata */
+    object-fit: cover; /* Mantiene le proporzioni senza sgranare */

@@ -1,0 +1,10 @@
+﻿@model NewsEntity
+<script>
+    $('#modalTitle').text(document.getElementById("Nome").title);
+</script>
+
+<img class="card-img-top" src="@Model.ImmaginePath" alt="Card image cap">
+<p style="display:none" id="Nome" title="@Model.TitoloNotizia"></p>
+<p>@Model.DataInserimento</p>
+<p>@Model.Occhiello</p>
+<p>@Model.CorpoNotizia</p>

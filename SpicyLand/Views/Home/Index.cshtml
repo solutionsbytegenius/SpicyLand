@@ -62,16 +62,30 @@
                             @foreach (var x in Model)
                             {
                                 <li class="media">
-                                    <img class="mr-3 w-25 h-25" src="/Images/Logo/logo.png" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <h5 class="mt-0 mb-1">@x.TitoloNotizia</h5>
                                         (@x.DataInserimento)
                                         <br />
-                                        @x.CorpoNotizia
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                @x.Occhiello
+                                            </div>
+                                            <div class="col-md-6"></div>
+                                            <div class="col-md-2"> <a class="btn btn-primary" asp-area="" asp-controller="Home" asp-action="News">Vai alle Notizie</a></div>
+                                        </div>
                                     </div>
                                 </li>
+                                
                                 <hr />
                             }
+                        }
+                        else
+                        {
+                            <li class="media">
+                                <div class="media-body">
+                                    <p>Nessuna notizia presente</p>
+                                </div>
+                            </li>
                         }
                     </ul>
                 </div>

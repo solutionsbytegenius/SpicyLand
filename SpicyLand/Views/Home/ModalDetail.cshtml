@@ -1,58 +1,73 @@
 ﻿@model PaninoEntity
 <script>
-	$(document).ready(function () {
-		$('#check1').change(function () {
-			if (this.checked) {
-				$('#DropDownBevanda').show();
-				$('#DropDownPatatine').show();
-				document.getElementById("check").value = true;
-			} else {
-				$('#DropDownBevanda').hide();
-				$('#DropDownPatatine').hide();
-				document.getElementById("check").value = false;
-			}
-		});
-	});
-	$('#modalTitle').text(document.getElementById("Nome").title);
+    $(document).ready(function () {
+        $('#check1').change(function () {
+            if (this.checked) {
+                $('#DropDownBevanda').show();
+                $('#DropDownPatatine').show();
+                document.getElementById("check").value = true;
+            } else {
+                $('#DropDownBevanda').hide();
+                $('#DropDownPatatine').hide();
+                document.getElementById("check").value = false;
+            }
+        });
+    });
+    $('#modalTitle').text(document.getElementById("Nome").title);
 </script>
+@if (Model.PaninoMese)
+{
+    <span class="promo-star" style="
+    padding-right: 10px;
+    ">&#9733;</span>
+}
 <img class="card-img-top" src="@Model.PathImage" alt="Card image cap">
-<p style="display:none" id="Nome" title="@Model.Nome"></p>
+@if (Model.PaninoMese)
+{
+    <p style="display:none" id="Nome" title="@Model.Nome - Piatto del mese"></p>
+}
+else
+{
+    <p style="display:none" id="Nome" title="@Model.Nome"></p>
+}
 <p>@Model.Descrizione</p>
 <p> <b>Prezzo: </b> € @Model.Prezzo</p>
 <div class="row">
-	<div class="col-md-4">
-		<div class="form-check">
-			<input class="form-check-input" type="checkbox" id="check1" />
-			<input type="hidden" id="check" name="Plus" value=""/>
-			<input type="hidden" id="prezzo" name="Prezzo" value="@Model.Prezzo"/>
-			<label class="form-check-label">Menu+? (+ €2,50)</label>
-		</div>
-	</div>
+    <div class="col-md-4">
+        <div class="form-check">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="check1" />
+            </div>
+            <input type="hidden" id="check" name="Plus" value="" />
+            <input type="hidden" id="prezzo" name="Prezzo" value="@Model.Prezzo" />
+            <label class="form-check-label">Menu+? (+ €2,50)</label>
+        </div>
+    </div>
 
-	<div class="col-md-4">
-		<div class="dropdown" id="DropDownPatatine" style="display:none;">
-			<select class="form-select btn btn-primary dropdown-toggle" name="Patatine" aria-label="Default select example">
-				<option value="" selected>Scegli Patatine</option>
-				<option value="Patatine Classiche">Patatine Classiche</option>
-				<option value="Vertigo">Vertigo</option>
-				<option value="Nachos">Nachos</option>
-			</select>
-		</div>
-	</div>
-	<div class="col-md-4">
-		<div class="dropdown" id="DropDownBevanda" style="display:none;">
-			<select class="form-select btn btn-primary dropdown-toggle" name="Bevanda" aria-label="Default select example">
-				<option value="" selected>Bevanda</option>
-				<option value="Acqua Naturale">Acqua Naturale</option>
-				<option value="Acqua Frizzante">Acqua Frizzante</option>
-				<option value="Coca-Cola">Coca-Cola</option>
-				<option value="Birra">Birra</option>
-			</select>
-		</div>
-	</div>
+    <div class="col-md-4">
+        <div class="dropdown" id="DropDownPatatine" style="display:none;">
+            <select class="form-select btn btn-primary dropdown-toggle" name="Patatine" aria-label="Default select example">
+                <option value="" selected>Scegli Patatine</option>
+                <option value="Patatine Classiche">Patatine Classiche</option>
+                <option value="Vertigo">Vertigo</option>
+                <option value="Nachos">Nachos</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dropdown" id="DropDownBevanda" style="display:none;">
+            <select class="form-select btn btn-primary dropdown-toggle" name="Bevanda" aria-label="Default select example">
+                <option value="" selected>Bevanda</option>
+                <option value="Acqua Naturale">Acqua Naturale</option>
+                <option value="Acqua Frizzante">Acqua Frizzante</option>
+                <option value="Coca-Cola">Coca-Cola</option>
+                <option value="Birra">Birra</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 <div class="form-group">
-	<label for="Note">Note:</label>
-	<textarea class="form-control" rows="3" name="Note" id="Note" placeholder="Inserisci eventuali note..."></textarea>
+    <label for="Note">Note:</label>
+    <textarea class="form-control" rows="3" name="Note" id="Note" placeholder="Inserisci eventuali note..."></textarea>
 </div>

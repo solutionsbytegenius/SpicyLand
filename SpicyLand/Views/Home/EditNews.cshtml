@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Notizie";
 }
-
+@model IEnumerable<NewsEntity>
 <script>
     $(document).ready(function () {
         $('.open-modal').click(function () {
@@ -62,6 +62,7 @@
                 <thead>
                     <tr>
                         <th>Titolo Notizia</th>
+                        <th>Occhiello</th>
                         <th>Corpo</th>
                         <th>Data Inserimento</th>
                         <th>In Primo Piano</th>
@@ -76,56 +77,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var x in Model)
+                    @if (!Model.Any())
                     {
                         <tr>
-                            <td>@x.TitoloNotizia</td>
-                            <td>@x.CorpoNotizia</td>
-                            <td>@x.DataInserimento</td>
-                            <td>
-                                @if (x.InPrimoPiano == true)
-                                {
-                                    <p>Attiva</p>
-                                }
-                                else
-                                {
-                                    <p>non attiva</p>
-                                }
-                            </td>
-                            <td>
-                                @if (x.Visibile == true)
-                                {
-                                    <p>Attiva</p>
-                                }
-                                else
-                                {
-                                    <p>non attiva</p>
-                                }
-                            </td>
-                            <td>
-                                @if (x.Scaduta == true)
-                                {
-                                    <p>Scaduta</p>
-                                }
-                                else
-                                {
-                                }
-                            </td>
-                            <td>
-                                @if (x.ScadenzaNotizia != null)
-                                {
-                                    @x.ScadenzaNotizia;
-                                }
-                                else
-                                {
-                                }
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalEditNews" data-guid="@x.NewsID">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                            </td>
+                            <td colspan="9" class="dt-empty"><center>Nessuna notizia presente...</center></td>
                         </tr>
+                    }
+                    else
+                    {
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.TitoloNotizia</td>
+                                <td>@x.Occhiello</td>
+                                <td>@x.CorpoNotizia</td>
+                                <td>@x.DataInserimento</td>
+                                <td>
+                                    @if (x.InPrimoPiano == true)
+                                    {
+                                        <p>Attiva</p>
+                                    }
+                                    else
+                                    {
+                                        <p>non attiva</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (x.Visibile == true)
+                                    {
+                                        <p>Attiva</p>
+                                    }
+                                    else
+                                    {
+                                        <p>non attiva</p>
+                                    }
+                                </td>
+                                <td>
+                                    @if (x.Scaduta == true)
+                                    {
+                                        <p>Scaduta</p>
+                                    }
+                                    else
+                                    {
+                                    }
+                                </td>
+                                <td>
+                                    @if (x.ScadenzaNotizia != null)
+                                    {
+                                        @x.ScadenzaNotizia
+                                        ;
+                                    }
+                                    else
+                                    {
+                                    }
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalEditNews" data-guid="@x.NewsID">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

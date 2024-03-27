@@ -29,6 +29,22 @@ else
 		}
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<label for="Occhiello" class="form-label">Occhiello Notizia:</label>
+		@if (Model != null)
+		{
+			<input type="text" class="form-control" id="Occhiello" name="Occhiello" value="@Model.Occhiello" required />
+		}
+		else
+		{
+			<input type="text" class="form-control" id="Occhiello" name="Occhiello" placeholder="Inserisci Occhiello Notizia" required />
+		}
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-md-12">
 
@@ -68,35 +84,48 @@ else
 		<label for="Visibile" class="form-label">Visibile: </label>
 		@if (Model != null && !String.IsNullOrEmpty(Model.Visibile))
 		{
-			<input type="checkbox" class="form-check-input" name="Visibile" id="Visibile" role="switch" checked />
+			
+			<div class="form-check form-switch">
+				<input type="checkbox" class="form-check-input" name="Visibile" id="Visibile" role="switch" checked />
+			</div>
 		}
 		else
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="Visibile" id="Visibile" role="switch" />
+			</div>
 		}
 	</div>
 	<div class="col-md-4">
 		<label for="Scaduta" class="form-label">Scaduta:</label>
 		@if (Model != null && !String.IsNullOrEmpty(Model.Scaduta))
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="Scaduta" id="Scaduta" role="switch" checked />
+			</div>
 
 		}
 		else
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="Scaduta" id="Scaduta" role="switch" />
+			</div>
 		}
 	</div>
 	<div class="col-md-4">
 		<label for="InPrimoPiano" class="form-label">In Piano:</label>
 		@if (Model != null && !String.IsNullOrEmpty(Model.InPrimoPiano))
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" checked />
+			</div>
 
 		}
 		else
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" />
+			</div>
 		}
 	</div>
 </div>
