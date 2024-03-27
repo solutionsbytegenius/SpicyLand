@@ -123,7 +123,8 @@ namespace SpicyLand.Controllers
         public IActionResult Index()
         {
             HttpContext.Session.SetString("Count", "0");
-            IEnumerable<NewsEntity> News = _db.News.Where(x => x.Scaduta==false && x.Visibile==true && x.ScadenzaNotizia>=DateTime.Now).ToList();
+            IEnumerable<NewsEntity> News = _db.News.Where(x => x.Scaduta==false && x.Visibile==true ).ToList();
+            foreach(var n in News) n.ImmaginePath = n.ImmaginePath.Substring(7);
             if (News.Any())
                 return View(News);
             return View();
@@ -266,7 +267,8 @@ namespace SpicyLand.Controllers
 
         public IActionResult News()
         {
-            IEnumerable<NewsEntity> news = _db.News.Where(x => x.Scaduta == false && x.Visibile == true && x.ScadenzaNotizia >= DateTime.Now).OrderByDescending(x=>x.DataInserimento).ToList();
+            IEnumerable<NewsEntity> news = _db.News.Where(x => x.Scaduta == false && x.Visibile == true ).OrderByDescending(x=>x.DataInserimento).ToList();
+            foreach (var n in news) n.ImmaginePath = n.ImmaginePath.Substring(7);
             return View("News",news);
         }
         #endregion
