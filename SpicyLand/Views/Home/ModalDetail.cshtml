@@ -35,7 +35,9 @@ else
 <div class="row">
     <div class="col-md-4">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="check1" />
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" id="check1" />
+            </div>
             <input type="hidden" id="check" name="Plus" value="" />
             <input type="hidden" id="prezzo" name="Prezzo" value="@Model.Prezzo" />
             <label class="form-check-label">Menu+? (+ €2,50)</label>

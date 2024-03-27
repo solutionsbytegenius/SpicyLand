@@ -111,22 +111,29 @@ else
 		<label for="InMenu1" class="form-label">In menu:</label>
 		@if (Model != null && !String.IsNullOrEmpty(Model.InMenu))
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="InMenu" id="InMenu1" role="switch" checked />
+			</div>
 		}
 		else
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="InMenu" id="InMenu1" role="switch" />
+			</div>
 		}
 		<br />
 		<label for="PaninoMese1" class="form-label">Piatto del mese:</label>
 		@if (Model != null && !String.IsNullOrEmpty(Model.PaninoMese))
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="PaninoMese" id="PaninoMese1" role="switch" checked />
-			
+			</div>
 		}
 		else
 		{
+			<div class="form-check form-switch">
 			<input type="checkbox" class="form-check-input" name="PaninoMese" id="PaninoMese1" role="switch" />
+			</div>
 		}
 	</div>
 </div>

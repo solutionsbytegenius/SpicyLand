@@ -79,39 +79,48 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var x in Model)
+                    @if (Model.Any())
+                    {
+                        @foreach (var x in Model)
+                        {
+                            <tr>
+                                <td>@x.Nome</td>
+                                <td>@x.Descrizione</td>
+                                <td>€ @x.Prezzo</td>
+                                <td>
+                                    @if (x.PaninoMese == true)
+                                    {
+                                        <p>Piatto del mese</p>
+                                    }
+                                    else
+                                    {
+                                    }
+                                </td>
+                                <td>
+                                    @if (x.InMenu == true)
+                                    {
+                                        <p>In menù</p>
+                                    }
+                                    else
+                                    {
+                                        <p>Non in menù</p>
+                                    }
+                                </td>
+                                <td>
+                                    @x.DataCreazione
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalEdit" data-guid="@x.PaninoID">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@x.Nome</td>
-                            <td>@x.Descrizione</td>
-                            <td>€ @x.Prezzo</td>
-                            <td>
-                                @if (x.PaninoMese == true)
-                                {
-                                    <p>Piatto del mese</p>
-                                }
-                                else
-                                {
-                                }
-                            </td>
-                            <td>
-                                @if (x.InMenu == true)
-                                {
-                                    <p>In menù</p>
-                                }
-                                else
-                                {
-                                    <p>Non in menù</p>
-                                }
-                            </td>
-                            <td>
-                                @x.DataCreazione
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalEdit" data-guid="@x.PaninoID">
-                                    <i class="bi bi-pencil-square"></i>
-                                </button>
-                            </td>
+                            <td colspan="7" class="dt-empty"><center>Nessun piatto presente nel menù...</center></td>
                         </tr>
                     }
                 </tbody>

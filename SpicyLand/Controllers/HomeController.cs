@@ -104,7 +104,8 @@ namespace SpicyLand.Controllers
                 ImmaginePath = news.ImmaginePath,
                 InPrimoPiano = news.InPrimoPiano ? "on" : "",
                 Scaduta = news.Scaduta ? "on" : "",
-                Visibile = news.Visibile ? "on" : ""
+                Visibile = news.Visibile ? "on" : "",
+                Occhiello = news.Occhiello
             };
 #pragma warning restore CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
 
@@ -479,7 +480,7 @@ namespace SpicyLand.Controllers
                         {
                             Random rand = new Random();
                             // Imposta il percorso di destinazione (ad esempio wwwroot)
-                            var imagePath = Path.Combine("wwwroot", "Images", "Panini", rand.Next(0, 50).ToString() + "-" + p.PathImage);
+                            var imagePath = Path.Combine("wwwroot", "Images", "Panini", rand.Next(0, 50).ToString() + "-" + p.Immagine.FileName);
                             p.PathImage = imagePath;
                             // Salva l'immagine sul disco
                             image.Save(imagePath);
@@ -558,7 +559,7 @@ namespace SpicyLand.Controllers
                         {
                             Random rand = new Random();
                             // Imposta il percorso di destinazione (ad esempio wwwroot)
-                            var imagePath = Path.Combine("wwwroot", "Images", "Notizie", rand.Next(0, 50).ToString() + "-" + n.ImmaginePath);
+                            var imagePath = Path.Combine("wwwroot", "Images", "Notizie", rand.Next(0, 50).ToString() + "-" + n.Immagine.FileName);
                             n.ImmaginePath = imagePath;
                             // Salva l'immagine sul disco
                             image.Save(imagePath);
