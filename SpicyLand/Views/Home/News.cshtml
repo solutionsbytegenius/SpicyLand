@@ -38,24 +38,35 @@
 <div class="container">
     <div class="row">
 
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            <div class="col-md-3 ">
-                <div class="card" style="width: 18rem; margin-bottom:20px;">
-                    <img class="card-img-top-card" src="@x.ImmaginePath" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">@x.TitoloNotizia</h5>
-                        <p class="card-text">
-                            (@x.DataInserimento)
-                            <br />
-                            @x.Occhiello
-                        </p>
-                        <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalNews" data-guid="@x.NewsID">
-                            Dettagli
-                        </button>
+            @foreach (var x in Model)
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        <img class="card-img-top-card" src="@x.ImmaginePath" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.TitoloNotizia</h5>
+                            <p class="card-text">
+                                (@x.DataInserimento)
+                                <br />
+                                @x.Occhiello
+                            </p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#ModalNews" data-guid="@x.NewsID">
+                                Dettagli
+                            </button>
+                        </div>
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <minititolo>Nessuna notizia presente</minititolo>
             </div>
+            <div class="col-md-3"></div>
         }
     </div>
 </div>
