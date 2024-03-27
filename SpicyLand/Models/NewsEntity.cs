@@ -8,6 +8,7 @@ namespace SpicyLand.Models
         public Guid NewsID { get; set; }
         public string TitoloNotizia { get; set; }
         public string CorpoNotizia { get; set; }
+        public string Occhiello { get; set; }
         public DateTime DataInserimento { get; set; }
         public bool Visibile { get; set; }
         public string ImmaginePath { get; set; }

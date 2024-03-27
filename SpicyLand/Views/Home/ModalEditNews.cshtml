@@ -29,6 +29,22 @@ else
 		}
 	</div>
 </div>
+
+<div class="row">
+	<div class="col-md-12">
+
+		<label for="Occhiello" class="form-label">Occhiello Notizia:</label>
+		@if (Model != null)
+		{
+			<input type="text" class="form-control" id="Occhiello" name="Occhiello" value="@Model.Occhiello" required />
+		}
+		else
+		{
+			<input type="text" class="form-control" id="Occhiello" name="Occhiello" placeholder="Inserisci Occhiello Notizia" required />
+		}
+	</div>
+</div>
+
 <div class="row">
 	<div class="col-md-12">
 

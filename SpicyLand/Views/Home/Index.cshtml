@@ -62,12 +62,11 @@
                             @foreach (var x in Model)
                             {
                                 <li class="media">
-                                    <img class="mr-3 w-25 h-25" src="@x.ImmaginePath" alt="Generic placeholder image">
                                     <div class="media-body">
                                         <h5 class="mt-0 mb-1">@x.TitoloNotizia</h5>
                                         (@x.DataInserimento)
                                         <br />
-                                        @x.CorpoNotizia
+                                        @x.Occhiello
                                     </div>
                                 </li>
                                 <hr />
