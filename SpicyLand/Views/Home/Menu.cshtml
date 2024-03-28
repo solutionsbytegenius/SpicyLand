@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<PaninoEntity>
+@{
     ViewData["Title"] = "Menù";
 }
 
@@ -58,27 +59,36 @@
 <div id="menu-item-1" class="container collapse">
     <div class="row">
 
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Carne")
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Carne")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:darkred;">Nessun piatto di carne presente...</p>
+            </div>
         }
     </div>
 </div>
@@ -88,27 +98,36 @@
 <div id="menu-item-2" class="container collapse">
     <div class="row">
 
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Pesce")
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Pesce")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:blue;">Nessun piatto di pesce presente...</p>
+            </div>
         }
     </div>
 </div>
@@ -117,28 +136,36 @@
 <hr style="border-top: 2px solid green;">
 <div id="menu-item-3" class="container collapse">
     <div class="row">
-
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Vegan")
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Vegan")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:green;">Nessun piatto vegano presente...</p>
+            </div>
         }
     </div>
 </div>
@@ -147,28 +174,38 @@
 <hr style="border-top: 2px solid black;">
 <div id="menu-item-4" class="container collapse">
     <div class="row">
-
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Sfiziosità")
+
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Sfiziosità")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:black;">Nessuna sfiziostà presente...</p>
+            </div>
+            
         }
     </div>
 </div>
@@ -178,28 +215,37 @@
 <hr style="border-top: 2px solid darkcyan;">
 <div id="menu-item-5" class="container collapse">
     <div class="row">
-
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Bevande")
+
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Bevande")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:darkcyan;">Nessuna bevanda presente...</p>
+            </div>
         }
     </div>
 </div>
@@ -208,28 +254,37 @@
 <hr style="border-top: 2px solid White;">
 <div id="menu-item-6" class="container collapse">
     <div class="row">
-
-        @foreach (var x in Model)
+        @if (Model.Any())
         {
-            @if (x.Categoria == "Dolce")
+
+            @foreach (var x in Model)
             {
-                <div class="col-md-3 ">
-                    <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        @if (x.PaninoMese)
-                        {
-                            <span class="promo-star">&#9733;</span>
-                        }
-                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title">@x.Nome</h5>
-                            <p class="card-text">€ @x.Prezzo</p>
-                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                                Dettagli
-                            </button>
+                @if (x.Categoria == "Dolce")
+                {
+                    <div class="col-md-3 ">
+                        <div class="card" style="width: 18rem; margin-bottom:20px;">
+                            @if (x.PaninoMese)
+                            {
+                                <span class="promo-star">&#9733;</span>
+                            }
+                            <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">@x.Nome</h5>
+                                <p class="card-text">€ @x.Prezzo</p>
+                                <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                    Dettagli
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             }
+        }
+        else
+        {
+            <div class="col-md-12">
+                <p style="color:white;">Nessun Dolce presente...</p>
+            </div>
         }
     </div>
 </div>
