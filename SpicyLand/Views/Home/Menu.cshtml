@@ -25,6 +25,19 @@
         });
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        menuItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.querySelector(targetId);
+                targetElement.classList.toggle('show');
+            });
+        });
+    });
+</script>
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 
@@ -40,9 +53,9 @@
     </div>
 </div>
 <br />
-<h2 style="color: darkred;"><i class="fas fa-drumstick-bite"></i> Carne</h2>
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-1" style="color: darkred;"><i class="fas fa-drumstick-bite"></i> Carne</h2>
 <hr style="border-top: 2px solid darkred;">
-<div class="container">
+<div id="menu-item-1" class="container collapse">
     <div class="row">
 
         @foreach (var x in Model)
@@ -70,9 +83,9 @@
     </div>
 </div>
 
-<h2 style="color: blue;"><i class="fas fa-fish"></i> Pesce</h2>
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-2" style="color: blue;"><i class="fas fa-fish"></i> Pesce</h2>
 <hr style="border-top: 2px solid blue;">
-<div class="container">
+<div id="menu-item-2" class="container collapse">
     <div class="row">
 
         @foreach (var x in Model)
@@ -100,9 +113,9 @@
     </div>
 </div>
 
-<h2 style="color: green;"><i class="fas fa-carrot"></i> Vegano</h2>
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-3" style="color: green;"><i class="fas fa-carrot"></i> Vegano</h2>
 <hr style="border-top: 2px solid green;">
-<div class="container">
+<div id="menu-item-3" class="container collapse">
     <div class="row">
 
         @foreach (var x in Model)
@@ -130,9 +143,9 @@
     </div>
 </div>
 
-<h2 style="color: white;"><i class="fas fa-candy-cane"></i> Dolci</h2>
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-4" style="color: white;"><i class="fas fa-candy-cane"></i> Dolci</h2>
 <hr style="border-top: 2px solid White;">
-<div class="container">
+<div id="menu-item-4" class="container collapse">
     <div class="row">
 
         @foreach (var x in Model)
