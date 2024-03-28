@@ -143,9 +143,70 @@
     </div>
 </div>
 
-<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-4" style="color: white;"><i class="fas fa-candy-cane"></i> Dolci</h2>
-<hr style="border-top: 2px solid White;">
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-4" style="color: black;"><img width="35" height="35" src="https://img.icons8.com/external-icongeek26-outline-icongeek26/64/external-chips-party-icongeek26-outline-icongeek26.png" style="color:black; invert('50%'); " /> Sfiziosità</h2>
+<hr style="border-top: 2px solid black;">
 <div id="menu-item-4" class="container collapse">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            @if (x.Categoria == "Sfiziosità")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-5" style="color: darkcyan;"><i class="bi bi-cup-straw"></i> Bevande</h2>
+<hr style="border-top: 2px solid darkcyan;">
+<div id="menu-item-5" class="container collapse">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            @if (x.Categoria == "Bevande")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-6" style="color: white;"><i class="fas fa-candy-cane"></i> Dolci</h2>
+<hr style="border-top: 2px solid White;">
+<div id="menu-item-6" class="container collapse">
     <div class="row">
 
         @foreach (var x in Model)
