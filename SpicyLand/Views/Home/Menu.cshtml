@@ -21,11 +21,24 @@
                 .fail(function (xhr, status, error) {
                     console.error("Errore durante il caricamento dei dati della modale:", error);
                 });
-            
+
         });
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuItems = document.querySelectorAll('.menu-item');
 
+        menuItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const targetElement = document.querySelector(targetId);
+                targetElement.classList.toggle('show');
+            });
+        });
+    });
+</script>
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 
 <div class="Container">
@@ -40,32 +53,125 @@
     </div>
 </div>
 <br />
-
-<div class="container">
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-1" style="color: darkred;"><i class="fas fa-drumstick-bite"></i> Carne</h2>
+<hr style="border-top: 2px solid darkred;">
+<div id="menu-item-1" class="container collapse">
     <div class="row">
-        
+
         @foreach (var x in Model)
         {
-            <div class="col-md-3 ">
-                <div class="card" style="width: 18rem; margin-bottom:20px;">
-                    @if (x.PaninoMese)
-                    {
-                        <span class="promo-star">&#9733;</span>
-                    }
-                    <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">@x.Nome</h5>
-                        <p class="card-text">€ @x.Prezzo</p>
-                        <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
-                            Dettagli
-                        </button>
+            @if (x.Categoria == "Carne")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>
 
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-2" style="color: blue;"><i class="fas fa-fish"></i> Pesce</h2>
+<hr style="border-top: 2px solid blue;">
+<div id="menu-item-2" class="container collapse">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            @if (x.Categoria == "Pesce")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-3" style="color: green;"><i class="fas fa-carrot"></i> Vegano</h2>
+<hr style="border-top: 2px solid green;">
+<div id="menu-item-3" class="container collapse">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            @if (x.Categoria == "Vegan")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-4" style="color: white;"><i class="fas fa-candy-cane"></i> Dolci</h2>
+<hr style="border-top: 2px solid White;">
+<div id="menu-item-4" class="container collapse">
+    <div class="row">
+
+        @foreach (var x in Model)
+        {
+            @if (x.Categoria == "Dolce")
+            {
+                <div class="col-md-3 ">
+                    <div class="card" style="width: 18rem; margin-bottom:20px;">
+                        @if (x.PaninoMese)
+                        {
+                            <span class="promo-star">&#9733;</span>
+                        }
+                        <img class="card-img-top-card" src="@x.PathImage" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">@x.Nome</h5>
+                            <p class="card-text">€ @x.Prezzo</p>
+                            <button type="button" class="btn btn-primary open-modal" data-bs-toggle="modal" data-bs-target="#myModal" data-guid="@x.PaninoID">
+                                Dettagli
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
 
 
 <!-- The Modal -->
