@@ -123,7 +123,6 @@ namespace SpicyLand.Controllers
         #region Pages
         public IActionResult Index()
         {
-            HttpContext.Session.SetString("Count", "0");
             IEnumerable<NewsEntity> News = _db.News.Where(x => x.Scaduta == false && x.Visibile == true).ToList();
 
             if (News.Any())
@@ -651,7 +650,6 @@ namespace SpicyLand.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
         #endregion
-
 
         #endregion
     }
