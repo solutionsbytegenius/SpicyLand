@@ -24,7 +24,9 @@ namespace SpicyLand.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
         private CartItemCollection CartCollection = new CartItemCollection();
-        private string connectionString = "Server=tcp:solutionsbyte.database.windows.net,1433;Initial Catalog=SpicyLand;Persist Security Info=False;User ID=dimarco;Password=SistemiCloud2023@;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+        private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+
+
         #endregion
 
 
