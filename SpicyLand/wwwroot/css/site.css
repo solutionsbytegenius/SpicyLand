@@ -208,3 +208,13 @@ MiniTitolo {
     width: 287px; /* Imposta la larghezza desiderata */
     height: 200px; /* Imposta l'altezza desiderata */
     object-fit: cover; /* Mantiene le proporzioni senza sgranare */
+}
+
+.carousel-inner img {
+    max-height: 400px; /* Altezza massima delle immagini */
+    width: auto; /* Larghezza automatica per mantenere le proporzioni originali */
+}
+
+.imgres{
+    max-height: 500px;
+}
