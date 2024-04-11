@@ -39,7 +39,6 @@
         });
     });
 </script>
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 
 <div class="Container">
@@ -53,13 +52,14 @@
         <div class="col-md-3"></div>
     </div>
 </div>
+
 <br />
 <h2 class="menu-item" data-toggle="collapse" data-target="#menu-item-1" style="color: darkred;"><i class="fas fa-drumstick-bite"></i> Carne</h2>
 <hr style="border-top: 2px solid darkred;">
 <div id="menu-item-1" class="container collapse">
     <div class="row">
 
-        @if (Model.Any())
+        @if (Model.Where(x=>x.Categoria=="Carne").ToList().Any())
         {
             @foreach (var x in Model)
             {
@@ -98,7 +98,7 @@
 <div id="menu-item-2" class="container collapse">
     <div class="row">
 
-        @if (Model.Any())
+        @if (Model.Where(x => x.Categoria == "Pesce").ToList().Any())
         {
             @foreach (var x in Model)
             {
@@ -136,7 +136,7 @@
 <hr style="border-top: 2px solid green;">
 <div id="menu-item-3" class="container collapse">
     <div class="row">
-        @if (Model.Any())
+        @if (Model.Where(x => x.Categoria == "Vegan").ToList().Any())
         {
             @foreach (var x in Model)
             {
@@ -174,7 +174,7 @@
 <hr style="border-top: 2px solid black;">
 <div id="menu-item-4" class="container collapse">
     <div class="row">
-        @if (Model.Any())
+        @if (Model.Where(x => x.Categoria == "Sfiziosità").ToList().Any())
         {
 
             @foreach (var x in Model)
@@ -215,7 +215,7 @@
 <hr style="border-top: 2px solid darkcyan;">
 <div id="menu-item-5" class="container collapse">
     <div class="row">
-        @if (Model.Any())
+        @if (Model.Where(x => x.Categoria == "Bevande").ToList().Any())
         {
 
             @foreach (var x in Model)
@@ -254,7 +254,7 @@
 <hr style="border-top: 2px solid White;">
 <div id="menu-item-6" class="container collapse">
     <div class="row">
-        @if (Model.Any())
+        @if (Model.Where(x => x.Categoria == "Dolce").ToList().Any())
         {
 
             @foreach (var x in Model)
