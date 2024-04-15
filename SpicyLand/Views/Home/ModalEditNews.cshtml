@@ -2,6 +2,37 @@
 <script>
 	$('#modalTitle').text(document.getElementById("Nome1").title);
 
+
+
+	// Get references to the checkboxes
+	 visibileCheckbox = document.getElementById('Visibile');
+	 scadutaCheckbox = document.getElementById('Scaduta');
+	 primoPianoCheckbox = document.getElementById('InPrimoPiano');
+
+	// Add event listeners to handle checkbox interactions
+	visibileCheckbox.addEventListener('change', function () {
+		if (this.checked) {
+			scadutaCheckbox.checked = false;
+			$('#CheckInPiano').show();
+		}
+	});
+
+	scadutaCheckbox.addEventListener('change', function () {
+		if (this.checked) {
+			visibileCheckbox.checked = false;
+			primoPianoCheckbox.checked = false;
+			$('#CheckInPiano').hide();
+		}
+		else{
+			scadutaCheckbox.checked = false;
+			$('#CheckInPiano').show();
+		}
+	});
+	if (document.getElementById('Scaduta').checked) {
+		visibileCheckbox.checked = false;
+		primoPianoCheckbox.checked = false;
+		$('#CheckInPiano').hide();
+	}
 </script>
 @if (Model != null)
 {
@@ -82,7 +113,7 @@ else
 <div class="row">
 	<div class="col-md-4">
 		<label for="Visibile" class="form-label">Visibile: </label>
-		@if (Model != null && !String.IsNullOrEmpty(Model.Visibile))
+		@if (Model != null && !String.IsNullOrEmpty(Model.Visibile) && String.IsNullOrEmpty(Model.Scaduta))
 		{
 			
 			<div class="form-check form-switch">
@@ -113,19 +144,23 @@ else
 		}
 	</div>
 	<div class="col-md-4">
-		<label for="InPrimoPiano" class="form-label">In Piano:</label>
-		@if (Model != null && !String.IsNullOrEmpty(Model.InPrimoPiano))
-		{
-			<div class="form-check form-switch">
-			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" checked />
-			</div>
+		<div id="CheckInPiano">
+			
+			@if (Model != null && !String.IsNullOrEmpty(Model.InPrimoPiano) && String.IsNullOrEmpty(Model.Scaduta))
+			{
+				<label for="InPrimoPiano" class="form-label">In Piano:</label>
+				<div class="form-check form-switch">
+					<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" checked />
+				</div>
 
-		}
-		else
-		{
-			<div class="form-check form-switch">
-			<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" />
-			</div>
-		}
+			}
+			else
+			{
+				<label for="InPrimoPiano" class="form-label">In Piano:</label>
+				<div class="form-check form-switch">
+					<input type="checkbox" class="form-check-input" name="InPrimoPiano" id="InPrimoPiano" role="switch" />
+				</div>
+			}
+		</div>
 	</div>
 </div>

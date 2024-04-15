@@ -572,6 +572,11 @@ namespace SpicyLand.Controllers
 
                 }
             }
+            else
+            {
+                var imagePath = Path.Combine("wwwroot", "Images", "Logo", "logo.png");
+                n.ImmaginePath = imagePath;
+            }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
