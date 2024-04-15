@@ -24,16 +24,16 @@ namespace SpicyLand.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
         private CartItemCollection CartCollection = new CartItemCollection();
-        private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+		private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+		// private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+
+		#endregion
 
 
-        #endregion
+		#region methods
 
-
-        #region methods
-
-        #region modal
-        public IActionResult ShowModal(Guid PaninoID)
+		#region modal
+		public IActionResult ShowModal(Guid PaninoID)
         {
 #pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
             PaninoEntity Panino = _db.Panino.FirstOrDefault(x => x.PaninoID == PaninoID);
@@ -130,10 +130,9 @@ namespace SpicyLand.Controllers
             if (News.Any())
             {
                 foreach (var n in News) n.ImmaginePath = n.ImmaginePath.Substring(7);
-                return View(News);
             }
 
-            return View();
+            return View(News);
         }
 
         [HttpGet]
@@ -575,7 +574,7 @@ namespace SpicyLand.Controllers
             else
             {
                 var imagePath = Path.Combine("wwwroot", "Images", "Logo", "logo.png");
-                n.ImmaginePath = imagePath;
+                n.ImmaginePath = !String.IsNullOrEmpty(n.ImmaginePath)? n.ImmaginePath : imagePath;
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

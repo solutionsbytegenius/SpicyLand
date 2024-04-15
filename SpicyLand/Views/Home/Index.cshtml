@@ -88,7 +88,7 @@
                 <MiniTitolo>Notizie</MiniTitolo>
                 <div class="card">
                     <ul class="list-unstyled card-body">
-                        @if (Model != null)
+                        @if (Model.Where(x => x.Visibile == true).ToList().Any())
                         {
                             @foreach (var x in Model)
                             {
@@ -114,7 +114,7 @@
                         {
                             <li class="media">
                                 <div class="media-body">
-                                    <p>Nessuna notizia presente</p>
+                                    <p style="color:black">Nessuna notizia presente</p>
                                 </div>
                             </li>
                         }
