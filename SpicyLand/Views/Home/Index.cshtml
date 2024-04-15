@@ -13,7 +13,7 @@
         }
 
         // Imposta l'intervallo per far avanzare automaticamente il carousel ogni 3 secondi
-        var intervalloCarousel = setInterval(avanzareCarousel, 5000); 
+        var intervalloCarousel = setInterval(avanzareCarousel, 5000);
 
         // Interrompe l'intervallo quando il mouse entra nel carousel
         $('.carousel').mouseenter(function () {
@@ -22,7 +22,7 @@
 
         // Riavvia l'intervallo quando il mouse esce dal carousel
         $('.carousel').mouseleave(function () {
-            intervalloCarousel = setInterval(avanzareCarousel, 5000); 
+            intervalloCarousel = setInterval(avanzareCarousel, 5000);
         });
     });
 </script>
@@ -86,10 +86,11 @@
         <div class="row">
             <div class="col-md-12 bg-opacity-50">
                 <MiniTitolo>Notizie</MiniTitolo>
-                <div class="card">
-                    <ul class="list-unstyled card-body">
-                        @if (Model.Where(x => x.Visibile == true).ToList().Any())
-                        {
+                @if (Model.Where(x => x.Visibile == true).ToList().Any())
+                {
+                    <div class="card">
+                        <ul class="list-unstyled card-body">
+
                             @foreach (var x in Model)
                             {
                                 <li class="media">
@@ -109,17 +110,20 @@
 
                                 <hr />
                             }
-                        }
-                        else
-                        {
-                            <li class="media">
-                                <div class="media-body">
-                                    <p style="color:black">Nessuna notizia presente</p>
-                                </div>
-                            </li>
-                        }
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
+                }
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-6">
+                            <minititolo>Nessuna notizia presente</minititolo>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                }
+
             </div>
         </div>
     </div>
