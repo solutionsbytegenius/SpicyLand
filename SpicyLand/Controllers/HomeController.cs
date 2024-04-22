@@ -15,6 +15,8 @@ using System.Configuration;
 using System;
 using Microsoft.Extensions.Hosting;
 using System.Drawing;
+using Docker.DotNet;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SpicyLand.Controllers
 {
@@ -23,17 +25,18 @@ namespace SpicyLand.Controllers
         #region Vars
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _db;
+        // private readonly DockerClient _dockerClient;
         private CartItemCollection CartCollection = new CartItemCollection();
-		private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
-		// private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        //private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
 
-		#endregion
+        #endregion
 
 
-		#region methods
+        #region methods
 
-		#region modal
-		public IActionResult ShowModal(Guid PaninoID)
+        #region modal
+        public IActionResult ShowModal(Guid PaninoID)
         {
 #pragma warning disable CS8600 // Conversione del valore letterale Null o di un possibile valore Null in un tipo che non ammette i valori Null.
             PaninoEntity Panino = _db.Panino.FirstOrDefault(x => x.PaninoID == PaninoID);
@@ -443,7 +446,7 @@ namespace SpicyLand.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddOrEditPanino(Panino p)
+        public async Task<IActionResult> AddOrEditPanino(Panino p)
         {
             var InMenu = false;
             if (!String.IsNullOrEmpty(p.InMenu))
@@ -463,137 +466,108 @@ namespace SpicyLand.Controllers
                 }
             }
 
-            if (p.Immagine != null && p.Immagine.Length > 0)
+            try
             {
-                try
+                // Gestione dell'immagine
+                var imageName = string.Empty;
+                var imagePath = string.Empty;
+
+                if (p.Immagine != null && p.Immagine.Length > 0)
                 {
-                    using (var memoryStream = new MemoryStream())
+                    imageName = $"{Guid.NewGuid().ToString()}.jpg"; // Genera un nome univoco per l'immagine
+                    imagePath = Path.Combine("wwwroot", "Images", "Panini", imageName); // Percorso assoluto all'interno del contenitore
+
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
                     {
-                        // Posiziona il MemoryStream all'inizio dei dati
-                        memoryStream.Position = 0;
-
-                        // Copia i dati dell'immagine nel MemoryStream
-                        p.Immagine.CopyTo(memoryStream);
-
-                        // Crea un'istanza di Image dal MemoryStream
-                        using (var image = Image.FromStream(memoryStream))
-                        {
-                            Random rand = new Random();
-                            // Imposta il percorso di destinazione (ad esempio wwwroot)
-                            var imagePath = Path.Combine("wwwroot", "Images", "Panini", rand.Next(0, 50).ToString() + "-" + p.Immagine.FileName);
-                            p.PathImage = imagePath;
-                            // Salva l'immagine sul disco
-                            image.Save(imagePath);
-                        }
+                        await p.Immagine.CopyToAsync(stream);
                     }
                 }
-                catch (Exception ex)
-                {
 
+                // Connessione al database e inserimento dei dati
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+                    SqlCommand command = new SqlCommand("sp_ResyncPiatto", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@PaninoID", p.PaninoID);
+                    command.Parameters.AddWithValue("@Nome", p.Nome);
+                    command.Parameters.AddWithValue("@Prezzo", p.Prezzo);
+                    command.Parameters.AddWithValue("@PaninoMese", PaninoMese);
+                    command.Parameters.AddWithValue("@PathImage", imagePath);
+                    command.Parameters.AddWithValue("@InMenu", InMenu);
+                    command.Parameters.AddWithValue("@Descrizione", p.Descrizione);
+                    command.Parameters.AddWithValue("@Categoria", p.Categoria);
+                    command.Parameters.AddWithValue("@Add", p.New);
+                    await command.ExecuteNonQueryAsync();
+                    connection.Close();
                 }
+                return RedirectToAction("EditMenu");
             }
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            catch (Exception ex)
             {
-                connection.Open();
-                SqlCommand command = new SqlCommand("sp_ResyncPiatto", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@PaninoID", p.PaninoID);
-                command.Parameters.AddWithValue("@Nome", p.Nome);
-                command.Parameters.AddWithValue("@Prezzo", p.Prezzo);
-                command.Parameters.AddWithValue("@PaninoMese", PaninoMese);
-                command.Parameters.AddWithValue("@PathImage", p.PathImage);
-                command.Parameters.AddWithValue("@InMenu", InMenu);
-                command.Parameters.AddWithValue("@Descrizione", p.Descrizione);
-                command.Parameters.AddWithValue("@Categoria", p.Categoria);
-                command.Parameters.AddWithValue("@Add", p.New);
-                command.ExecuteNonQuery();
-                connection.Close();
+                // Aggiungi logging per registrare l'eccezione
+                _logger.LogError(ex, "Errore durante l'inserimento delle notizie nel database");
+
+                // Gestione dell'eccezione
+                return RedirectToAction("Error");
             }
-            return RedirectToAction("EditMenu");
         }
 
         [HttpPost]
-        public IActionResult AddOrEditNews(Notizie n)
+        public async Task<IActionResult> AddOrEditNews(Notizie n, IFormFile immagine)
         {
-            var Scaduta = false;
-            if (!String.IsNullOrEmpty(n.Scaduta))
-            {
-                if (n.Scaduta == "on")
-                {
-                    Scaduta = true;
-                }
-            }
+            var Scaduta = !string.IsNullOrEmpty(n.Scaduta) && n.Scaduta == "on";
+            var Visibile = !string.IsNullOrEmpty(n.Visibile) && n.Visibile == "on";
+            var Primo = !string.IsNullOrEmpty(n.InPrimoPiano) && n.InPrimoPiano == "on";
 
-            var Visibile = false;
-            if (!String.IsNullOrEmpty(n.Visibile))
+            try
             {
-                if (n.Visibile == "on")
-                {
-                    Visibile = true;
-                }
-            }
+                // Gestione dell'immagine
+                var imageName = string.Empty;
+                var imagePath = string.Empty;
 
-            var Primo = false;
-            if (!String.IsNullOrEmpty(n.InPrimoPiano))
-            {
-                if (n.InPrimoPiano == "on")
+                if (immagine != null && immagine.Length > 0)
                 {
-                    Primo = true;
-                }
-            }
+                    imageName = $"{Guid.NewGuid().ToString()}.jpg"; // Genera un nome univoco per l'immagine
+                    imagePath = Path.Combine("wwwroot", "Images", "Notizie", imageName); // Percorso assoluto all'interno del contenitore
 
-            if (n.Immagine != null && n.Immagine.Length > 0)
-            {
-                try
-                {
-                    using (var memoryStream = new MemoryStream())
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
                     {
-                        // Posiziona il MemoryStream all'inizio dei dati
-                        memoryStream.Position = 0;
-
-                        // Copia i dati dell'immagine nel MemoryStream
-                        n.Immagine.CopyTo(memoryStream);
-
-                        // Crea un'istanza di Image dal MemoryStream
-                        using (var image = Image.FromStream(memoryStream))
-                        {
-                            Random rand = new Random();
-                            // Imposta il percorso di destinazione (ad esempio wwwroot)
-                            var imagePath = Path.Combine("wwwroot", "Images", "Notizie", rand.Next(0, 50).ToString() + "-" + n.Immagine.FileName);
-                            n.ImmaginePath = imagePath;
-                            // Salva l'immagine sul disco
-                            image.Save(imagePath);
-                        }
+                        await immagine.CopyToAsync(stream);
                     }
                 }
-                catch (Exception ex)
-                {
 
+                // Connessione al database e inserimento dei dati
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    SqlCommand command = new SqlCommand("[sp_ResyncNews]", connection);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@NewsID", n.NewsID);
+                    command.Parameters.AddWithValue("@Titolo", n.TitoloNotizia);
+                    command.Parameters.AddWithValue("@Corpo", n.CorpoNotizia);
+                    command.Parameters.AddWithValue("@Occhiello", n.Occhiello);
+                    command.Parameters.AddWithValue("@Visibile", Visibile);
+                    command.Parameters.AddWithValue("@PathImage", imagePath); // Utilizzo del percorso assoluto dell'immagine
+                    command.Parameters.AddWithValue("@Scaduta", Scaduta);
+                    command.Parameters.AddWithValue("@PrimoPiano", Primo);
+                    command.Parameters.AddWithValue("@Add", n.New);
+
+                    await command.ExecuteNonQueryAsync();
+                    connection.Close();
                 }
+
+                return RedirectToAction("EditNews");
             }
-            else
+            catch (Exception ex)
             {
-                var imagePath = Path.Combine("wwwroot", "Images", "Logo", "logo.png");
-                n.ImmaginePath = !String.IsNullOrEmpty(n.ImmaginePath)? n.ImmaginePath : imagePath;
+                // Aggiungi logging per registrare l'eccezione
+                _logger.LogError(ex, "Errore durante l'inserimento delle notizie nel database");
+
+                // Gestione dell'eccezione
+                return RedirectToAction("Error");
             }
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                SqlCommand command = new SqlCommand("[sp_ResyncNews]", connection);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@NewsID", n.NewsID);
-                command.Parameters.AddWithValue("@Titolo", n.TitoloNotizia);
-                command.Parameters.AddWithValue("@Corpo", n.CorpoNotizia);
-                command.Parameters.AddWithValue("@Occhiello", n.Occhiello);
-                command.Parameters.AddWithValue("@Visibile", Visibile);
-                command.Parameters.AddWithValue("@PathImage", n.ImmaginePath);
-                command.Parameters.AddWithValue("@Scaduta", Scaduta);
-                command.Parameters.AddWithValue("@PrimoPiano", Primo);
-                command.Parameters.AddWithValue("@Add", n.New);
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-            return RedirectToAction("EditNews");
         }
 
         #region Comments
@@ -634,8 +608,8 @@ namespace SpicyLand.Controllers
                 return StatusCode(500, $"Errore durante il salvataggio del panino: {ex.Message}");
             }
         }
-         
-         
+
+
          */
 
         #endregion
@@ -644,10 +618,11 @@ namespace SpicyLand.Controllers
         #endregion
 
         #region default methods
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext db/*,DockerClient dockerClient*/)
         {
             _db = db;
             _logger = logger;
+            //_dockerClient = dockerClient;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

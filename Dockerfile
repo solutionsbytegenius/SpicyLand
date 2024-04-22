@@ -20,4 +20,9 @@ RUN dotnet publish "SpicyLand.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Aggiungi il comando per creare la directory necessaria
+RUN mkdir -p /app/wwwroot/Images/News
+RUN mkdir -p /app/wwwroot/Images/Panini
+
 ENTRYPOINT ["dotnet", "SpicyLand.dll"]

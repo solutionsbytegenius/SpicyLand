@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dbspicyland:
+    image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+    container_name: dbspicyland
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SistemiCloud2023@
+      - MSSQL_PID=Evaluation
+    ports:
+      - "27123:1433"
+    networks:
+      netspicyland:
+        ipv4_address: 172.18.0.2
+    volumes:
+      - "C:\\Images\\:/app/wwwroot/Images"
+    hostname: dbspicyland
+
+  spicyland:
+    image: spicyland
+    container_name: spicyland
+    ports:
+      - "35400:8080"
+    networks:
+      netspicyland:
+        ipv4_address: 172.18.0.3
+    volumes:
+      - "C:\\Images\\:/app/wwwroot/Images"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+networks:
+  netspicyland:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
