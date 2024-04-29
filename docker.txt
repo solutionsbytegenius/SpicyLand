@@ -313,7 +313,7 @@ https://minikube.sigs.k8s.io/docs/start/
 
 ecco qui:
 minikube start --memory=1970
-kubectl apply -f network-definition.yaml
+kubectl apply -f network-definition.yaml  // DA NON FARE
 kubectl apply -f networkdef.yaml
 kubectl apply -f netspicylandk.yaml
 
@@ -361,3 +361,14 @@ basta effettuare il seguente comando:
 minikube ip:
 
 docker context use default
+
+per startare la webapp con kubernetes:
+--Config:
+kubectl apply -f dbConnect.yaml
+kubectl apply -f SpicylandStart.yaml
+kubectl apply -f loadbalancer.yaml
+
+--Avvio:
+kubectl get svc spicyland-service
+
+Attendi 5 min circa
