@@ -1,0 +1,363 @@
+Video di riferimento :
+
+https://www.youtube.com/watch?v=BeXUQZksl3w&t=217s
+
+un esempio per farlo è andare nel sito:
+
+https://hub.docker.com/r/phenixita/devvopps/tags
+
+copiare la stringa della versione interessata: 
+docker pull phenixita/devvopps:latest
+
+ (pull-> ci consente di importare dal sito l'ultima versione dell'app) 
+Per runnare bisogna utilizzare:
+
+docker run -p 8080:80 phenixita/devvopps:latest
+
+in parole parole runna la porta 8080 è quella nostra, mentre  80 è quello del container
+
+
+_______________________________
+Docker asp net
+
+https://learn.microsoft.com/it-it/training/modules/intro-to-containers/2-deploy-docker-image-locally
+
+
+
+Come dockerizzare un app:
+Ecco una guida passo-passo su come creare un Docker container su Windows per una web app in .NET 8 caricata su GitHub:
+
+    Preparazione dell'ambiente:
+        Assicurati di aver installato Docker Desktop sul tuo sistema Windows. Puoi scaricarlo dal sito ufficiale di Docker: Docker Desktop for Windows.
+        Installa .NET 8 SDK sul tuo sistema. Puoi scaricarlo dal sito ufficiale di .NET: Download .NET.
+        Assicurati di avere Git installato sul tuo sistema per clonare il repository GitHub.
+
+    Clonare il repository GitHub:
+        Apri il prompt dei comandi o PowerShell.
+        Naviga nella directory in cui vuoi scaricare il repository.
+        Esegui il comando seguente per clonare il repository GitHub:
+
+    bash
+
+git clone <URL_del_tuo_repository_GitHub>
+
+Configurare la tua Web App:
+
+    Assicurati che la tua applicazione .NET 8 sia configurata correttamente. Puoi testarla localmente per assicurarti che funzioni.
+
+Creare un Dockerfile:
+
+    Nella directory radice della tua applicazione, crea un file chiamato Dockerfile.
+    Apri il file Dockerfile con un editor di testo e inserisci il seguente codice:
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+# Copia il file del progetto e ripristina le dipendenze
+COPY ["SpicyLand/SpicyLand.csproj", "SpicyLand/"]
+RUN dotnet restore "SpicyLand/SpicyLand.csproj"
+
+# Copia tutti i file dell'applicazione e compila il progetto
+COPY . .
+WORKDIR "/app/SpicyLand"
+RUN dotnet build "SpicyLand.csproj" -c Release -o /app/build
+
+Build e push dell'immagine Docker:
+
+    Apri il prompt dei comandi o PowerShell.
+    Naviga nella directory in cui si trova il file Dockerfile.
+    Esegui il seguente comando per buildare l'immagine Docker:
+
+php
+
+docker build -t <nome_immagine> .
+
+Sostituisci <nome_immagine> con il nome che desideri per l'immagine Docker.
+
+Esegui il container Docker:
+
+    Dopo che l'immagine è stata buildata con successo, eseguila con il seguente comando:
+
+arduino
+
+    docker run -d -p 8080:80 <nome_immagine>
+
+    Sostituisci <nome_immagine> con il nome dell'immagine Docker che hai scelto.
+
+    Testare la Web App:
+        Apri il browser e visita http://localhost:8080 per vedere se la tua web app è stata avviata correttamente nel container Docker.
+
+Questi sono i passaggi di base per creare un container Docker su Windows per una web app .NET 8 caricata su GitHub. Assicurati di personalizzare i comandi e le configurazioni in base alle esigenze specifiche del tuo progetto.
+
+
+
+
+    docker run -d -p 8080:80 <nome_immagine> -> questo ci dà la possibilità di connetterci
+
+
+
+_____________________________________________________
+Apertura del nat :
+
+
+ dobbiamo creare   daemon.json in
+ %APPDATA%\Docker
+dobbiamo inserire, all'interno del file la seguente stringa:
+{
+  "features": {
+    "nat": true
+  }
+}
+_________________________________________
+
+se dà  il seguente problema
+
+Error.
+An error occurred while processing your request.
+
+Request ID: 00-1abbc1d98ceaa0ccc87de3598650313f-cb353f6060986eb4-00
+Development Mode
+
+Swapping to Development environment will display more detailed information about the error that occurred.
+
+The Development environment shouldn't be enabled for deployed applications. It can result in displaying sensitive information from exceptions to end users. For local debugging, enable the Development environment by setting the ASPNETCORE_ENVIRONMENT environment variable to Development and restarting the app.
+
+
+si utilizza questa stringa:
+
+PS C:\Users\nikec> docker run -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 spicyland
+
+_____________________________-
+creazione rete per far comunicare le docker
+docker network create retespicyland
+
+Questo comando mette i container all'interno della rete
+docker network connect retespicyland spicyland --> questo è il nome del database
+
+docker network connect retespicyland SpicyLand --> questo è il nome della webapp
+
+
+docker network inspect retespicyland --> ci dà la possibilità di vedere i dettagli della rete
+
+rinominare: docker rename <current_name> <new_name>
+
+il network connect funziona quando i container  sono avviati? 
+
+se si vuole eliminare la rete per qualunque motivo :
+docker network rm retespicyland
+
+
+docker run --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 spicyland
+docker run --network netspicyland --ip 172.18.0.2 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=SistemiCloud2023@" -e "MSSQL_PID=Evaluation" -p 27123:1433  --name sqlpreview --hostname sqlpreview -d mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04 
+
+per entrare nella bash del docker basta semplicemente premere nel container e andare su exec e scrivere bash.
+
+Inoltre, i container non comunicano con le porte esterne ma tramite le porte interne.
+Per cui, il problema si risolve, semplicemente mettendo la porta interna che in questo caso è "1433" così i due container comunicano perfettamente. 
+
+
+Non salva perché manca il volume nel container:
+
+docker volume create SpVolume
+
+
+SPVolume è il nome del volume
+
+Adesso abbiamo la configurazione
+
+
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 spicyland  -v SpVolume:/wwwroot/Images/ spicyland
+
+la versione col mount:
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 --mount source=SpVolume,target=/wwwroot/Images/ spicyland
+
+
+
+La versione col mount mi piace di più
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 --mount source=SpVolume,target=app/wwwroot/Images/ spicyland
+
+
+forse così potrebbe funzionare:
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 --mount source=SpVolume,target=/app/wwwroot/Images spicyland
+
+
+Se non funziona, posso usare il bindmount e quindi, elimino il volume:
+
+docker volume rm NOME_DEL_VOLUME
+
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 --mount source=SpVolume,target=/app/wwwroot/Images spicyland
+
+
+C:\Users\nikec\source\repos\SpicyLand\SpicyLand\wwwroot
+
+questo è il bindmount:
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 -v C:\Images\:/app/wwwroot/Images spicyland
+
+creazione DB:
+
+
+docker run --network netspicyland --ip 172.18.0.2 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=SistemiCloud2023@" -e "MSSQL_PID=Evaluation" -p 27123:1433 -v C:\Images\:/app/wwwroot/Images1 --name dbspicyland --hostname dbspicyland -d mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 -v C:\Images\:/app/wwwroot/Images1/ spicyland
+
+
+
+adesso, sono riuscito dopo avere installato il docker compose, eseguendo queste stringhe su PS:
+
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+poi:
+
+Start-BitsTransfer -Source "https://github.com/docker/compose/releases/download/v2.17.2/docker-compose-Windows-x86_64.exe" -Destination $Env:ProgramFiles\Docker\docker-compose.exe
+
+
+poi:
+
+docker compose version  
+
+l'ultima stringa serve per vedere la versione installata.
+Dopo dicché ci dirigiamo nel file del progetto,
+eliminiamo la rete creata in precedenza e i container .
+
+Per eliminare la rete dobbiamo semplicemente eseguire :
+docker network rm netspicyland
+
+
+ora, creiamo il file :
+
+docker-compose.yml 
+nella cartella principale della webapp (in cui abbiamo creato in precedenza il dockfile).
+
+All'interno del file dovremo inserire il seguente codice:
+version: '3.8'
+
+services:
+  dbspicyland:
+    image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+    container_name: dbspicyland
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SistemiCloud2023@
+      - MSSQL_PID=Evaluation
+    ports:
+      - "27123:1433"
+    networks:
+      netspicyland:
+        ipv4_address: 172.18.0.2
+    volumes:
+      - "C:\\Images\\:/app/wwwroot/Images"
+    hostname: dbspicyland
+
+  spicyland:
+    image: spicyland
+    container_name: spicyland
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "35400:8080"
+    networks:
+      netspicyland:
+        ipv4_address: 172.18.0.3
+    volumes:
+      - "C:\\Images\\:/app/wwwroot/Images"
+
+networks:
+  netspicyland:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+
+
+
+Questo andrà semplicemente a crearci tutto l'occorrente che ci serve dai container alla rete ed inoltre ci raggrupperà nel progetto i due o più container, per cui tutto sarà meglio strutturata.
+
+__________________________
+
+per ora quello che bisogna fare sono le seguenti:
+
+questo all'interno del file docker :
+docker build -t spicyland .
+
+docker run --network netspicyland --ip 172.18.0.2 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=SistemiCloud2023@" -e "MSSQL_PID=Evaluation" -p 27123:1433 -v C:\Images\:/app/wwwroot/Images1 --name dbspicyland --hostname dbspicyland -d mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+
+
+
+docker run --name spicyland --network netspicyland --ip 172.18.0.3 -e "ASPNETCORE_ENVIRONMENT=Development" -d -p 35400:8080 -v C:\Images\:/app/wwwroot/Images1/ spicyland
+
+Qui c'è quello che serve per configurare il kubernetis:
+
+
+https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/
+
+
+qui ti consente di installare il minikube:
+
+
+https://minikube.sigs.k8s.io/docs/start/
+
+
+
+ecco qui:
+minikube start --memory=1970
+kubectl apply -f network-definition.yaml
+kubectl apply -f networkdef.yaml
+kubectl apply -f netspicylandk.yaml
+
+
+per fa in modo che questo venga fatto, dobbiamo caricare il fle sul dockerhub
+
+docker tag spicyland andreas995/spicyland:latest
+
+kubectl apply -f spicyland.yaml
+
+
+ogni qual volta che tu devi avviare minikube devi utilizzare il comando:
+prima avvia il container del minikube
+
+minikube start
+
+
+ok, ora bisogna compilare anche questi due file di configurazione:
+
+
+kubectl apply -f spicyland-service.yaml
+kubectl apply -f dbspicyland-service.yaml
+
+
+adesso fatto questo, dobbiamo perciò usare i seguenti comandi:
+kubectl get pods
+
+questo ci dà la possibilità vedere tutti i servizi e se sono in esecuzione o se hanno qualche errore
+
+poi :
+kubectl get services
+
+per verificare le nodeport.
+
+per poi verificare gli ip:
+
+kubectl get nodes -o wide
+
+perfetto, se facendo il 
+minikube ip
+
+dovesse dare un errore .
+basta effettuare il seguente comando:
+
+minikube ip:
+
+docker context use default
