@@ -6,7 +6,6 @@ spec:
   containers:
   - name: spicyland
     image: andreas995/spicyland:latest
-
     env:
     - name: ASPNETCORE_ENVIRONMENT
       value: "Development"

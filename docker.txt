@@ -372,3 +372,10 @@ kubectl apply -f loadbalancer.yaml
 kubectl get svc spicyland-service
 
 Attendi 5 min circa
+
+
+______________
+
+kubectl port-forward svc/spicyland-service 5432:80
+
+questo qui serve per inoltrarlo nella porta
