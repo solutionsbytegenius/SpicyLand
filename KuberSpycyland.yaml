@@ -1,0 +1,126 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dbspicyland
+spec:
+  selector:
+    app: dbspicyland
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dbspicyland
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dbspicyland
+  template:
+    metadata:
+      labels:
+        app: dbspicyland
+    spec:
+      containers:
+        - name: mssql-server
+          image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+          ports:
+            - containerPort: 1433
+          env:
+            - name: ACCEPT_EULA
+              value: "Y"
+            - name: SA_PASSWORD
+              value: "SistemiCloud2023@"
+            - name: MSSQL_SA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mssql
+                  key: sa-password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: spicyland
+spec:
+  selector:
+    app: spicyland
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spicyland
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spicyland
+  template:
+    metadata:
+      labels:
+        app: spicyland
+    spec:
+      containers:
+        - name: spicyland
+          image: andreas995/spicyland:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              value: dbspicyland
+            - name: DB_USER
+              value: sa
+            - name: DB_PASSWORD
+              value: "SistemiCloud2023@"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-spicyland-to-dbspicyland
+spec:
+  podSelector:
+    matchLabels:
+      app: dbspicyland
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: spicyland
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dbspicyland-to-spicyland
+spec:
+  podSelector:
+    matchLabels:
+      app: spicyland
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: dbspicyland

@@ -379,3 +379,56 @@ ______________
 kubectl port-forward svc/spicyland-service 5432:80
 
 questo qui serve per inoltrarlo nella porta
+
+
+
+questo è per mettersi nel namespace di minikube:
+
+
+kubectl config set-context --current --namespace=minikube
+
+kubectl config view --minify | grep namespace
+
+questo è per esporlo:
+
+kubectl expose service dbspicyland-service --type=NodePort --name=dbspicyland-nodeport --namespace=default
+
+questo è per controllare tutti i namespace :
+
+kubectl get namespaces
+
+
+
+eliminare i servizi , deplement e pods:
+kubectl delete pod --all
+kubectl delete deployments --all
+kubectl delete service --all
+
+in un'unica riga :
+
+
+kubectl delete pod --all | kubectl delete deployments --all | kubectl delete service --all | kubectl apply -f KuberSpycyland.yaml
+
+
+
+minikube service spicyland --url
+
+
+qui c'è il tutorial :
+https://github.com/flannel-io/flannel
+
+
+dopo aver installato Frannel bisogna fare questo comando per cambiare l'userspace:
+
+kubectl config set-context --current --namespace=kube-flannel
+
+se dà problemi il "dbspicyland", dobbiamo creare una chiave segreta:
+
+
+kubectl create secret generic mssql --from-literal=sa-password=SistemiCloud2023@
+
+wget -O /tmp/SpicyLand.bak "https://drive.google.com/file/d/1WOFNuRVyRQbb-f4HIreJX11Qt4vCSPG0/view?usp=drive_link"
+
+
+kubectl cp kube-flannel/dbspicyland-795547468b-kkmfw:/var/opt/mssql/data/SpicyLand.bak C:\Users\nikec\Desktop\SpicyLand.bak
+

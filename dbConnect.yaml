@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: Secret
-metadata:
-  name: dbspicyland
-type: Opaque
-data:
-  username: c2E=  # Codifica Base64 di "sa"
-  password: U2lzdGVtaUNsb3VkMjAyMzA0QCM=  # Codifica Base64 di "SistemiCloud2023@"
