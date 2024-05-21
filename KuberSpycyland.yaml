@@ -2,6 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: dbspicyland
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal-subnet: aks-subnet
 spec:
   selector:
     app: dbspicyland
@@ -10,6 +12,7 @@ spec:
       port: 1433
       targetPort: 1433
   type: LoadBalancer
+  loadBalancerIP: 172.171.140.70
 
 ---
 
@@ -29,7 +32,7 @@ spec:
     spec:
       containers:
         - name: mssql-server
-          image: mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+          image: andreas995/dbspicyland:latest
           ports:
             - containerPort: 1433
           env:
@@ -49,6 +52,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: spicyland
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal-subnet: aks-subnet
 spec:
   selector:
     app: spicyland
@@ -57,6 +62,7 @@ spec:
       port: 8080
       targetPort: 8080
   type: LoadBalancer
+  loadBalancerIP: 172.171.140.70
 
 ---
 
@@ -65,7 +71,7 @@ kind: Deployment
 metadata:
   name: spicyland
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: spicyland
@@ -124,3 +130,34 @@ spec:
         - podSelector:
             matchLabels:
               app: dbspicyland
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spicyland-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - host: spicyland.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: spicyland
+                port:
+                  number: 8080
+    - host: dbspicyland.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: dbspicyland
+                port:
+                  number: 1433

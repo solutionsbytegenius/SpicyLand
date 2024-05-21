@@ -432,3 +432,33 @@ wget -O /tmp/SpicyLand.bak "https://drive.google.com/file/d/1WOFNuRVyRQbb-f4HIre
 
 kubectl cp kube-flannel/dbspicyland-795547468b-kkmfw:/var/opt/mssql/data/SpicyLand.bak C:\Users\nikec\Desktop\SpicyLand.bak
 
+
+ecco gli ultimi due:
+
+minikube service spicyland --url
+
+
+minikube service dbspicyland --url
+
+
+(per interagire con il db)
+
+
+
+
+
+
+
+
+
+
+
+
+_______________
+altre note docker:
+
+C:\Users\nikec>docker run --network netspicyland --ip 172.18.0.2 -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=SistemiCloud2023@" -e "MSSQL_PID=Evaluation" -p 27123:1433 -v C:\Images\:/app/wwwroot/Images1 --name dbspicyland1 --hostname dbspicyland1 -d andreas995/dbspicyland
+cc4479d01a61f62290e80f1c0a7d7082b47321548069d26bfc67a295faf70983
+
+
+

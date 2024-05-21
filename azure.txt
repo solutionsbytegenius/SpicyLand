@@ -1,0 +1,22 @@
+per fare il login bisogna fare questo:
+
+az login 
+ssh azureuser@20.172.163.173
+questo è l'ip pubblico a cui noi possiamo accedere
+
+az group create --name SpicyLand --location eastus
+creare una macchina virtuale 
+PS C:\Users\nikec> az vm create --resource-group SpicyLand --name workerVM --image Ubuntu2204 --admin-username azureuser
+
+
+questo è per l'aks:
+
+az aks create --resource-group $env:RESOURCE_GROUP --name $env:CLUSTER_NAME --node-count 2 --node-vm-size "Standard_B2s" --enable-addons monitoring --generate-ssh-keys
+
+
+ogni volta per accedere è :
+az login 
+az aks get-credentials --admin --name SpicylandCluster --resource-group ReSpicyland
+
+potrebbe essere un indirizzo ip pubblico?
+172.171.140.70
