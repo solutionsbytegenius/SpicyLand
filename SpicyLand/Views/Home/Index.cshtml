@@ -58,7 +58,7 @@
                                 {
                                     <div class="carousel-item @(x.NewsID == Model.FirstOrDefault(y=>y.InPrimoPiano==true).NewsID ? "active" : "")">
                                         <a asp-area="" asp-controller="Home" asp-action="News">
-                                            <img src="@Url.Content(@x.ImmaginePath)" class="d-block w-100" alt="@x.TitoloNotizia">
+                                            <img src="@Url.Action("GetImageNews", "Home", new { NewsID = x.NewsID })" class="d-block w-100" alt="@x.TitoloNotizia">
                                         </a>
                                     </div>
                                 }

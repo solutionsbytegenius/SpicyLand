@@ -15,5 +15,6 @@ namespace SpicyLand.Models
         public DateTime? ScadenzaNotizia { get; set; }
         public bool Scaduta {  get; set; }
         public bool InPrimoPiano {  get; set; }
+        public byte[] Immagine { get; set;}
     }
 }

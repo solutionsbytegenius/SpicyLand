@@ -21,7 +21,7 @@
     padding-right: 10px;
     ">&#9733;</span>
 }
-<img class="card-img-top" src="@Model.PathImage" alt="Card image cap">
+<img class="card-img-top" src="@Url.Action("GetImagePanino", "Home", new { PaninoID = @Model.PaninoID })" alt="Card image cap">
 @if (Model.PaninoMese)
 {
     <p style="display:none" id="Nome" title="@Model.Nome - Piatto del mese"></p>

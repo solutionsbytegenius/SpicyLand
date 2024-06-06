@@ -17,6 +17,8 @@ using Microsoft.Extensions.Hosting;
 using System.Drawing;
 using Docker.DotNet;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.IO;
+using System.Data.Entity;
 
 namespace SpicyLand.Controllers
 {
@@ -27,9 +29,9 @@ namespace SpicyLand.Controllers
         private readonly ApplicationDbContext _db;
         // private readonly DockerClient _dockerClient;
         private CartItemCollection CartCollection = new CartItemCollection();
-        private string connectionString = "Server=dbspicyland,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        //private string connectionString = "Server=dbspicyland,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
         //private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
-        //private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
 
         #endregion
 
@@ -472,7 +474,7 @@ namespace SpicyLand.Controllers
                 // Gestione dell'immagine
                 var imageName = string.Empty;
                 var imagePath = string.Empty;
-
+                byte[] imageData = new byte[0];
                 if (p.Immagine != null && p.Immagine.Length > 0)
                 {
                     imageName = $"{Guid.NewGuid().ToString()}.jpg"; // Genera un nome univoco per l'immagine
@@ -481,6 +483,29 @@ namespace SpicyLand.Controllers
                     using (var stream = new FileStream(imagePath, FileMode.Create))
                     {
                         await p.Immagine.CopyToAsync(stream);
+                        
+                    }
+
+                    using (var fileStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await fileStream.CopyToAsync(memoryStream);
+                            imageData = memoryStream.ToArray();
+                        }
+                    }
+                }
+
+                else
+                {
+                    if (!p.New)
+                    {
+                        PaninoEntity p1 = _db.Panino.Where(x => x.PaninoID == p.PaninoID).FirstOrDefault();
+
+                        if (p1 != null)
+                        {
+                            imageData = p1.Immagine;
+                        }
                     }
                 }
 
@@ -499,6 +524,7 @@ namespace SpicyLand.Controllers
                     command.Parameters.AddWithValue("@Descrizione", p.Descrizione);
                     command.Parameters.AddWithValue("@Categoria", p.Categoria);
                     command.Parameters.AddWithValue("@Add", p.New);
+                    command.Parameters.AddWithValue("@image", imageData);
                     await command.ExecuteNonQueryAsync();
                     connection.Close();
                 }
@@ -526,7 +552,7 @@ namespace SpicyLand.Controllers
                 // Gestione dell'immagine
                 var imageName = string.Empty;
                 var imagePath = string.Empty;
-
+                byte[] imageData = new byte[0];
                 if (immagine != null && immagine.Length > 0)
                 {
                     imageName = $"{Guid.NewGuid().ToString()}.jpg"; // Genera un nome univoco per l'immagine
@@ -536,8 +562,28 @@ namespace SpicyLand.Controllers
                     {
                         await immagine.CopyToAsync(stream);
                     }
-                }
 
+                    using (var fileStream = new FileStream(imagePath, FileMode.Open, FileAccess.Read))
+                    {
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            await fileStream.CopyToAsync(memoryStream);
+                            imageData = memoryStream.ToArray();
+                        }
+                    }
+                }
+                else
+                {
+                    if (!n.New)
+                    {
+                        NewsEntity n1 = _db.News.Where(x => x.NewsID == n.NewsID).FirstOrDefault();
+
+                        if (n1 != null)
+                        {
+                            imageData = n1.Immagine;
+                        }
+                    }
+                }
                 // Connessione al database e inserimento dei dati
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
@@ -554,6 +600,7 @@ namespace SpicyLand.Controllers
                     command.Parameters.AddWithValue("@Scaduta", Scaduta);
                     command.Parameters.AddWithValue("@PrimoPiano", Primo);
                     command.Parameters.AddWithValue("@Add", n.New);
+                    command.Parameters.AddWithValue("@image", imageData);
 
                     await command.ExecuteNonQueryAsync();
                     connection.Close();
@@ -616,6 +663,32 @@ namespace SpicyLand.Controllers
         #endregion
 
 
+        #endregion
+
+        #region Gestione Image
+        [HttpGet]
+        public FileContentResult GetImagePanino(Guid PaninoID)
+        {
+            PaninoEntity p = _db.Panino.Where(x => x.PaninoID == PaninoID).FirstOrDefault();
+            if (p != null && p.Immagine != null)
+            {
+                return File(p.Immagine, "image/jpeg"); // Cambia il mime type secondo il formato dell'immagine
+            }
+
+            return null;
+        }
+
+        [HttpGet]
+        public FileContentResult GetImageNews(Guid NewsID)
+        {
+            NewsEntity n = _db.News.Where(x => x.NewsID == NewsID).FirstOrDefault();
+            if (n != null && n.Immagine != null)
+            {
+                return File(n.Immagine, "image/jpeg"); // Cambia il mime type secondo il formato dell'immagine
+            }
+
+            return null;
+        }
         #endregion
 
         #region default methods

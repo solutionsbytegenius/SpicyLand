@@ -461,4 +461,8 @@ C:\Users\nikec>docker run --network netspicyland --ip 172.18.0.2 -e "ACCEPT_EULA
 cc4479d01a61f62290e80f1c0a7d7082b47321548069d26bfc67a295faf70983
 
 
+Se si vuole copiare un file :
+
+kubectl cp dbspicyland-f649c9-tlsc6:/var/opt/mssql/data/backfile.bak ./backfile.bak
+Move-Item ./backfile.bak -Destination "C:\Users\nikec\source\repos\SpicyLand\backfile.bak"
 

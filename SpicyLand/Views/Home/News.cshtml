@@ -44,7 +44,7 @@
             {
                 <div class="col-md-3 ">
                     <div class="card" style="width: 18rem; margin-bottom:20px;">
-                        <img class="card-img-top-card" src="@x.ImmaginePath" alt="Card image cap">
+                        <img class="card-img-top-card" src="@Url.Action("GetImageNews", "Home", new { NewsID = x.NewsID })" alt="Card image cap">
                         <div class="card-body">
                             <h5 class="card-title">@x.TitoloNotizia</h5>
                             <p class="card-text">
