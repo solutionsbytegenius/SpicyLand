@@ -29,9 +29,9 @@ namespace SpicyLand.Controllers
         private readonly ApplicationDbContext _db;
         // private readonly DockerClient _dockerClient;
         private CartItemCollection CartCollection = new CartItemCollection();
-        //private string connectionString = "Server=dbspicyland,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        private string connectionString = "Server=dbspicyland,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
         //private string connectionString = "Server=172.18.0.2,1433;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
-        private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
+        //private string connectionString = "Server=localhost,27123;Database=SpicyLand;User Id=sa;Password=SistemiCloud2023@;TrustServerCertificate=true;";
 
         #endregion
 
