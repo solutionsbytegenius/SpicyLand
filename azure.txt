@@ -18,5 +18,8 @@ ogni volta per accedere è :
 az login 
 az aks get-credentials --admin --name SpicylandCluster --resource-group ReSpicyland
 
+az aks show --resource-group ReSpicyland --name SpicylandCluster --query "addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName" -o table
+
+
 potrebbe essere un indirizzo ip pubblico?
 172.171.140.70

@@ -12,7 +12,7 @@ spec:
       port: 1433
       targetPort: 1433
   type: LoadBalancer
-  loadBalancerIP: 172.171.140.70
+  loadBalancerIP: 57.152.59.240
 
 ---
 
@@ -62,7 +62,7 @@ spec:
       port: 8080
       targetPort: 8080
   type: LoadBalancer
-  loadBalancerIP: 172.171.140.70
+  loadBalancerIP: 57.152.59.240
 
 ---
 
